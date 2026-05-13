@@ -20,11 +20,11 @@ def seed_database():
         
         # Create Super Admin
         super_admin = User(
-            username="admin",
+            username="Sarvar",
             email="admin@santexnik.uz",
-            full_name="Super Admin",
+            full_name="Sarvar Salimov",
             phone="+998901234567",
-            hashed_password=get_password_hash("admin123"),
+            hashed_password=get_password_hash("exa1122211"),
             role="super_admin",
             is_active=True
         )
