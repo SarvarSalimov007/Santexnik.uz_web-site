@@ -264,9 +264,24 @@ function setupModals() {
         const password = document.getElementById('password').value;
         const btn = e.target.querySelector('button[type="submit"]');
         const orig = btn.textContent;
+        
         try {
             btn.textContent = 'Kirilmoqda...';
             btn.disabled = true;
+            
+            // Mock login for Vercel Demo
+            if (username === 'Sarvar' && password === 'exa1122211') {
+                localStorage.setItem('access_token', 'mock_token_for_demo');
+                localStorage.setItem('admin_user', 'Sarvar');
+                showToast('Muvaffaqiyatli kirdingiz! (Demo rejim)', 'success');
+                loginModal.style.display = 'none';
+                // Trigger admin dashboard view if needed
+                if (window.location.pathname.includes('admin')) {
+                    location.reload();
+                }
+                return;
+            }
+
             const result = await api.login(username, password);
             localStorage.setItem('access_token', result.access_token);
             showToast('Muvaffaqiyatli kirdingiz!', 'success');
