@@ -35,10 +35,39 @@ document.addEventListener('DOMContentLoaded', () => {
 function initApp() {
     fetchWorkers();
     fetchStats();
+    initLocations();
     setupFilters();
     setupModals();
     setupSearch();
     setupContactForm();
+}
+
+function initLocations() {
+    const citySelect = document.getElementById('citySelect');
+    const districtSelect = document.getElementById('districtSelect');
+    if (!citySelect || !districtSelect) return;
+
+    // Populate regions
+    for (const region in UZ_LOCATIONS) {
+        const option = document.createElement('option');
+        option.value = region;
+        option.textContent = region;
+        citySelect.appendChild(option);
+    }
+
+    // Dependent dropdown
+    citySelect.addEventListener('change', () => {
+        const region = citySelect.value;
+        districtSelect.innerHTML = '<option value="">Barcha tumanlar</option>';
+        if (region && UZ_LOCATIONS[region]) {
+            UZ_LOCATIONS[region].forEach(district => {
+                const option = document.createElement('option');
+                option.value = district;
+                option.textContent = district;
+                districtSelect.appendChild(option);
+            });
+        }
+    });
 }
 
 // ===== Data Fetching =====
@@ -177,17 +206,25 @@ function setupSearch() {
     const searchBtn = document.getElementById('searchBtn');
     const searchInput = document.getElementById('searchInput');
     const citySelect = document.getElementById('citySelect');
+    const districtSelect = document.getElementById('districtSelect');
+    
     const doSearch = () => {
         const query = searchInput.value.toLowerCase();
         const city = citySelect.value;
+        const district = districtSelect.value;
+        
         let filtered = appState.workers;
+        
         if (query) filtered = filtered.filter(w =>
             w.full_name.toLowerCase().includes(query) ||
             w.category.toLowerCase().includes(query) ||
             (CATEGORY_NAMES[w.category] || '').toLowerCase().includes(query) ||
             (w.description && w.description.toLowerCase().includes(query))
         );
+        
         if (city) filtered = filtered.filter(w => w.city === city);
+        if (district) filtered = filtered.filter(w => (w.address && w.address.includes(district)) || w.city === district);
+        
         const grid = document.getElementById('workersGrid');
         grid.innerHTML = '';
         if (!filtered.length) {
