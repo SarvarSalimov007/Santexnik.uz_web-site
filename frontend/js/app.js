@@ -245,6 +245,21 @@ function setupModals() {
     const workerModal = document.getElementById('workerModal');
     const closeBtns = document.querySelectorAll('.close-modal');
 
+    // Password Toggle Logic
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    }
+
     loginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
     closeBtns.forEach(btn => btn.addEventListener('click', function () { this.closest('.modal').style.display = 'none'; }));
     window.addEventListener('click', e => {

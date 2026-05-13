@@ -314,7 +314,10 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Parol</label>
-                    <input type="password" id="password" required>
+                    <div class="password-wrapper" style="position: relative;">
+                        <input type="password" id="password" required style="padding-right: 45px;">
+                        <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"></i>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Kirish</button>
             </form>
