@@ -290,10 +290,9 @@ function setupModals() {
                 localStorage.setItem('admin_user', 'Sarvar');
                 showToast('Muvaffaqiyatli kirdingiz! (Demo rejim)', 'success');
                 loginModal.style.display = 'none';
-                // Trigger admin dashboard view if needed
-                if (window.location.pathname.includes('admin')) {
-                    location.reload();
-                }
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1000);
                 return;
             }
 
@@ -301,6 +300,9 @@ function setupModals() {
             localStorage.setItem('access_token', result.access_token);
             showToast('Muvaffaqiyatli kirdingiz!', 'success');
             loginModal.style.display = 'none';
+            setTimeout(() => {
+                window.location.href = 'admin.html';
+            }, 1000);
         } catch (err) {
             showToast("Login yoki parol noto'g'ri!", 'error');
         } finally {
