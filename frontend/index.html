@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santexnik.uz - Professional Ustalar Platformasi</title>
+    <meta name="description" content="O'zbekistondagi eng yaxshi santexnik, elektrik va boshqa turdagi ustalarni toping. Reytingli va ishonchli xizmatlar.">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-wrench"></i>
+                Santexnik<span>.uz</span>
+            </a>
+            <div class="nav-links">
+                <a href="#home" class="active">Bosh sahifa</a>
+                <a href="#categories">Xizmatlar</a>
+                <a href="#workers">Ustalar</a>
+                <a href="#about">Qanday ishlaydi</a>
+                <a href="#contact">Bog'lanish</a>
+            </div>
+            <div class="nav-actions">
+                <button id="loginBtn" class="btn btn-outline">Kirish</button>
+                <a href="https://t.me/SantexnikUz_bot" target="_blank" class="btn btn-primary">
+                    <i class="fa-brands fa-telegram"></i> Bot
+                </a>
+            </div>
+            <div class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-close" id="mobileMenuClose"><i class="fa-solid fa-xmark"></i></div>
+        <a href="#home">Bosh sahifa</a>
+        <a href="#categories">Xizmatlar</a>
+        <a href="#workers">Ustalar</a>
+        <a href="#about">Qanday ishlaydi</a>
+        <a href="#contact">Bog'lanish</a>
+        <a href="https://t.me/SantexnikUz_bot" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram Bot</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>Ishonchli va tajribali <span class="highlight">ustalarni</span> toping</h1>
+                <p>Uyingizdagi har qanday muammoni hal qilish uchun O'zbekistondagi eng yaxshi mutaxassislarni tez va oson toping. Sifat kafolatlangan!</p>
+                <div class="search-box">
+                    <div class="search-input-group">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Qanday usta kerak? (masalan: Santexnik)">
+                    </div>
+                    <select id="citySelect" class="city-select">
+                        <option value="">Barcha hududlar</option>
+                        <option value="Toshkent">Toshkent</option>
+                        <option value="Samarqand">Samarqand</option>
+                        <option value="Farg'ona">Farg'ona</option>
+                        <option value="Andijon">Andijon</option>
+                    </select>
+                    <button id="searchBtn" class="btn btn-primary search-btn">Izlash</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-card card-1">
+                    <div class="stars"><i class="fa-solid fa-star"></i> 4.9</div>
+                    <p>Eng yaxshi reyting</p>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="icon"><i class="fa-solid fa-check-circle"></i></div>
+                    <p id="workerCountHero">500+ Ustalar</p>
+                </div>
+                <div class="hero-blob"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar fade-up">
+        <div class="stat-item">
+            <div class="stat-num" id="statWorkers">0</div>
+            <div class="stat-label">Faol ustalar</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="statReviews">0</div>
+            <div class="stat-label">Izohlar</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="statRating">0</div>
+            <div class="stat-label">O'rtacha reyting</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" id="statCategories">0</div>
+            <div class="stat-label">Xizmat turlari</div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories section">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Xizmat turlari</h2>
+                <p>O'zingizga kerakli mutaxassislikni tanlang</p>
+            </div>
+            <div class="category-grid" id="categoryGrid">
+                <div class="category-card fade-up" data-category="santexnik">
+                    <div class="icon-wrapper"><i class="fa-solid fa-faucet-drip"></i></div>
+                    <h3>Santexnika</h3>
+                    <p>Quvurlar, kranlar, isitish tizimlari</p>
+                </div>
+                <div class="category-card fade-up" data-category="elektrik">
+                    <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Elektrika</h3>
+                    <p>Simlar, rozetkalar, yoritish</p>
+                </div>
+                <div class="category-card fade-up" data-category="umumiy_tamir">
+                    <div class="icon-wrapper"><i class="fa-solid fa-hammer"></i></div>
+                    <h3>Ta'mirlash</h3>
+                    <p>Uyni to'liq yoki qisman ta'mirlash</p>
+                </div>
+                <div class="category-card fade-up" data-category="konditsioner">
+                    <div class="icon-wrapper"><i class="fa-solid fa-snowflake"></i></div>
+                    <h3>Konditsioner</h3>
+                    <p>O'rnatish, tozalash, ta'mirlash</p>
+                </div>
+                <div class="category-card fade-up" data-category="duradgor">
+                    <div class="icon-wrapper"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <h3>Duradgorlik</h3>
+                    <p>Eshik, deraza, yog'och ishlari</p>
+                </div>
+                <div class="category-card fade-up" data-category="svarka">
+                    <div class="icon-wrapper"><i class="fa-solid fa-fire"></i></div>
+                    <h3>Svarka ishlari</h3>
+                    <p>Darvoza, panjara, metall</p>
+                </div>
+                <div class="category-card fade-up" data-category="suvaqchi">
+                    <div class="icon-wrapper"><i class="fa-solid fa-trowel-bricks"></i></div>
+                    <h3>Suvaq ishlari</h3>
+                    <p>Devor tekislash, dekorativ suvoq</p>
+                </div>
+                <div class="category-card fade-up" data-category="plitakash">
+                    <div class="icon-wrapper"><i class="fa-solid fa-border-all"></i></div>
+                    <h3>Plitka terish</h3>
+                    <p>Hammom, oshxona, pol kafel</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Workers Section -->
+    <section id="workers" class="workers section bg-light">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Top Ustalar</h2>
+                <p>Mijozlar tomonidan eng yuqori baholangan mutaxassislar</p>
+            </div>
+            <div class="filters fade-up">
+                <div>
+                    <button class="filter-btn active" data-filter="all">Barchasi</button>
+                    <button class="filter-btn" data-filter="santexnik">Santexniklar</button>
+                    <button class="filter-btn" data-filter="elektrik">Elektriklar</button>
+                    <button class="filter-btn" data-filter="umumiy_tamir">Ta'mirchilar</button>
+                    <button class="filter-btn" data-filter="konditsioner">Konditsioner</button>
+                </div>
+                <div class="sort-dropdown">
+                    <select id="sortSelect">
+                        <option value="rating">Reyting bo'yicha</option>
+                        <option value="experience">Tajriba bo'yicha</option>
+                    </select>
+                </div>
+            </div>
+            <div class="workers-grid" id="workersGrid">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Ustalar yuklanmoqda...</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button id="loadMoreBtn" class="btn btn-outline">Yana ko'rsatish</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="about" class="how-it-works section">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Qanday ishlaydi?</h2>
+                <p>Usta chaqirish juda oson va qulay</p>
+            </div>
+            <div class="steps-container fade-up">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Usta qidiring</h3>
+                    <p>Kerakli mutaxassislik va hududni tanlang</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Tanlang</h3>
+                    <p>Reytingi, tajribasi va izohlarini o'qing</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Bog'laning</h3>
+                    <p>Telefon yoki Telegram orqali gaplashing</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Baho bering</h3>
+                    <p>Ish tugagach, ustaga baho va izoh qoldiring</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section section">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Usta chaqirish</h2>
+                <p>So'rov qoldiring, biz sizga eng mos ustani topamiz</p>
+            </div>
+            <form class="contact-form fade-up" id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Ismingiz</label>
+                    <input type="text" id="contactName" placeholder="Ismingizni kiriting" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactPhone">Telefon raqamingiz</label>
+                    <input type="tel" id="contactPhone" placeholder="+998 90 123 45 67" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactCategory">Xizmat turi</label>
+                    <select id="contactCategory">
+                        <option value="">Tanlang</option>
+                        <option value="santexnik">Santexnik</option>
+                        <option value="elektrik">Elektrik</option>
+                        <option value="umumiy_tamir">Ta'mirlash</option>
+                        <option value="konditsioner">Konditsioner</option>
+                        <option value="duradgor">Duradgor</option>
+                        <option value="svarka">Svarka</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Muammo tavsifi</label>
+                    <textarea id="contactMessage" rows="3" placeholder="Muammoingizni qisqacha tasvirlab bering..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">So'rov yuborish <i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-about">
+                <a href="#" class="logo" style="color:#fff">
+                    <i class="fa-solid fa-wrench"></i>
+                    Santexnik<span>.uz</span>
+                </a>
+                <p>O'zbekistondagi eng ishonchli ustalar qidiruvi platformasi. Biz bilan uyingiz doim soz!</p>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h3>Havolalar</h3>
+                <ul>
+                    <li><a href="#home">Bosh sahifa</a></li>
+                    <li><a href="#categories">Xizmatlar</a></li>
+                    <li><a href="#workers">Ustalar</a></li>
+                    <li><a href="#contact">Bog'lanish</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Bog'lanish</h3>
+                <p><i class="fa-solid fa-phone"></i> +998 90 123 45 67</p>
+                <p><i class="fa-solid fa-envelope"></i> info@santexnik.uz</p>
+                <p><i class="fa-solid fa-location-dot"></i> Toshkent shahri</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Santexnik.uz. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <!-- Worker Modal -->
+    <div id="workerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close-modal">&times;</span>
+            <h2 style="margin-bottom:24px">Admin panelga kirish</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Foydalanuvchi nomi</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Parol</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Kirish</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scroll to top -->
+    <button class="scroll-top" id="scrollTopBtn"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
