@@ -5,46 +5,47 @@ class ApiService {
         this.baseUrl = baseUrl;
     }
 
+    async _fetch(url, options = {}) {
+        if (!this.baseUrl) throw new Error('No API configured');
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
+        try {
+            const response = await fetch(url, { ...options, signal: controller.signal });
+            clearTimeout(timeout);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (e) {
+            clearTimeout(timeout);
+            throw e;
+        }
+    }
+
     async getWorkers(params = {}) {
         const query = new URLSearchParams(params).toString();
-        const url = `${this.baseUrl}/workers/${query ? '?' + query : ''}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
+        return this._fetch(`${this.baseUrl}/workers/${query ? '?' + query : ''}`);
     }
 
     async getWorkerById(id) {
-        const response = await fetch(`${this.baseUrl}/workers/${id}`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
+        return this._fetch(`${this.baseUrl}/workers/${id}`);
     }
 
     async getStats() {
-        const response = await fetch(`${this.baseUrl}/stats`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
+        return this._fetch(`${this.baseUrl}/stats`);
     }
 
     async login(username, password) {
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
-        const response = await fetch(`${this.baseUrl}/token`, {
-            method: 'POST',
-            body: formData
-        });
-        if (!response.ok) throw new Error('Login failed');
-        return await response.json();
+        return this._fetch(`${this.baseUrl}/token`, { method: 'POST', body: formData });
     }
 
     async submitContactRequest(data) {
-        const response = await fetch(`${this.baseUrl}/contacts/`, {
+        return this._fetch(`${this.baseUrl}/contacts/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
     }
 }
 
