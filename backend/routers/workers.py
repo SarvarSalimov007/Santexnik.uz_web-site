@@ -1,6 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Form, File, UploadFile
 from sqlalchemy.orm import Session
 from typing import List, Optional
+import os
+import shutil
+import uuid
 import models, schemas, auth
 from database import get_db
 from sqlalchemy import desc
@@ -130,3 +133,57 @@ def get_worker_reviews(worker_id: int, skip: int = 0, limit: int = 20, db: Sessi
         models.Review.worker_id == worker_id
     ).order_by(desc(models.Review.created_at)).offset(skip).limit(limit).all()
     return reviews
+
+@router.post("/register", response_model=schemas.WorkerResponse, status_code=status.HTTP_201_CREATED)
+def register_worker(
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    category: models.WorkerCategory = Form(...),
+    birth_date: Optional[str] = Form(None),
+    experience_years: int = Form(0),
+    city: Optional[str] = Form(None),
+    address: Optional[str] = Form(None),
+    description: Optional[str] = Form(None),
+    price_range: Optional[str] = Form(None),
+    telegram_username: Optional[str] = Form(None),
+    consent_fee: bool = Form(...),
+    photo: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    """Register a new worker with photo upload (Public). Needs admin approval."""
+    
+    if not consent_fee:
+        raise HTTPException(status_code=400, detail="Siz 2% komissiya to'loviga rozi bo'lishingiz shart")
+        
+    photo_url = None
+    if photo and photo.filename:
+        ext = photo.filename.split(".")[-1]
+        filename = f"{uuid.uuid4().hex}.{ext}"
+        filepath = os.path.join("static", "uploads", filename)
+        
+        with open(filepath, "wb") as buffer:
+            shutil.copyfileobj(photo.file, buffer)
+            
+        photo_url = f"/static/uploads/{filename}"
+        
+    db_worker = models.Worker(
+        full_name=full_name,
+        phone=phone,
+        category=category,
+        birth_date=birth_date,
+        experience_years=experience_years,
+        city=city,
+        address=address,
+        description=description,
+        price_range=price_range,
+        telegram_username=telegram_username,
+        consent_fee=consent_fee,
+        photo_url=photo_url,
+        is_active=False,
+        is_verified=False
+    )
+    
+    db.add(db_worker)
+    db.commit()
+    db.refresh(db_worker)
+    return db_worker

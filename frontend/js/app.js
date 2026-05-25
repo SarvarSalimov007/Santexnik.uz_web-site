@@ -77,27 +77,55 @@ function applyTheme(theme) {
 function initLocations() {
     const citySelect = document.getElementById('citySelect');
     const districtSelect = document.getElementById('districtSelect');
-    if (!citySelect || !districtSelect || typeof UZ_LOCATIONS === 'undefined') return;
+    const regCitySelect = document.getElementById('regCitySelect');
+    const regDistrictSelect = document.getElementById('regDistrictSelect');
+
+    if (typeof UZ_LOCATIONS === 'undefined') return;
 
     for (const region in UZ_LOCATIONS) {
-        const option = document.createElement('option');
-        option.value = region;
-        option.textContent = region;
-        citySelect.appendChild(option);
+        if(citySelect) {
+            const option = document.createElement('option');
+            option.value = region;
+            option.textContent = region;
+            citySelect.appendChild(option);
+        }
+        if(regCitySelect) {
+            const option = document.createElement('option');
+            option.value = region;
+            option.textContent = region;
+            regCitySelect.appendChild(option);
+        }
     }
 
-    citySelect.addEventListener('change', () => {
-        const region = citySelect.value;
-        districtSelect.innerHTML = '<option value="">Barcha tumanlar</option>';
-        if (region && UZ_LOCATIONS[region]) {
-            UZ_LOCATIONS[region].forEach(district => {
-                const option = document.createElement('option');
-                option.value = district;
-                option.textContent = district;
-                districtSelect.appendChild(option);
-            });
-        }
-    });
+    if(citySelect) {
+        citySelect.addEventListener('change', () => {
+            const region = citySelect.value;
+            districtSelect.innerHTML = '<option value="">Barcha tumanlar</option>';
+            if (region && UZ_LOCATIONS[region]) {
+                UZ_LOCATIONS[region].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+        });
+    }
+
+    if(regCitySelect) {
+        regCitySelect.addEventListener('change', () => {
+            const region = regCitySelect.value;
+            regDistrictSelect.innerHTML = '<option value="">Tuman/Manzilni tanlang</option>';
+            if (region && UZ_LOCATIONS[region]) {
+                UZ_LOCATIONS[region].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    regDistrictSelect.appendChild(option);
+                });
+            }
+        });
+    }
 }
 
 // ===== Data Fetching =====
@@ -428,6 +456,8 @@ function setupModals() {
     const loginBtn = document.getElementById('loginBtn');
     const loginModal = document.getElementById('loginModal');
     const workerModal = document.getElementById('workerModal');
+    const registerWorkerBtn = document.getElementById('registerWorkerBtn');
+    const registerWorkerModal = document.getElementById('registerWorkerModal');
     const closeBtns = document.querySelectorAll('.close-modal');
 
     // Password Toggle
@@ -442,18 +472,52 @@ function setupModals() {
         });
     }
 
-    loginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
+    if(loginBtn) loginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
+    if(registerWorkerBtn) registerWorkerBtn.addEventListener('click', () => registerWorkerModal.style.display = 'flex');
+    
     closeBtns.forEach(btn => btn.addEventListener('click', function () { this.closest('.modal').style.display = 'none'; }));
     window.addEventListener('click', e => {
         if (e.target === loginModal) loginModal.style.display = 'none';
         if (e.target === workerModal) workerModal.style.display = 'none';
+        if (e.target === registerWorkerModal) registerWorkerModal.style.display = 'none';
     });
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
-            loginModal.style.display = 'none';
-            workerModal.style.display = 'none';
+            if(loginModal) loginModal.style.display = 'none';
+            if(workerModal) workerModal.style.display = 'none';
+            if(registerWorkerModal) registerWorkerModal.style.display = 'none';
         }
     });
+
+    // Handle register worker form
+    const regForm = document.getElementById('registerWorkerForm');
+    if(regForm) {
+        regForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = regForm.querySelector('button[type="submit"]');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Yuborilmoqda...';
+            btn.disabled = true;
+
+            try {
+                const formData = new FormData(regForm);
+                // HTML chekbokslar faqat "on" qiymat yuboradi
+                if (formData.get('consent_fee') === 'on') {
+                    formData.set('consent_fee', 'true');
+                }
+                
+                await api.registerWorker(formData);
+                showToast('Arizangiz muvaffaqiyatli yuborildi! Tez orada tekshirib tasdiqlanadi.', 'success');
+                regForm.reset();
+                if(registerWorkerModal) registerWorkerModal.style.display = 'none';
+            } catch (err) {
+                showToast(err.message || 'Xatolik yuz berdi. Iltimos keyinroq urinib koring.', 'error');
+            } finally {
+                btn.innerHTML = orig;
+                btn.disabled = false;
+            }
+        });
+    }
 
     document.getElementById('loginForm').addEventListener('submit', async e => {
         e.preventDefault();

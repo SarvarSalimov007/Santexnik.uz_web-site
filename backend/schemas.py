@@ -38,6 +38,8 @@ class WorkerBase(BaseModel):
     full_name: str
     phone: str
     age: Optional[int] = None
+    birth_date: Optional[str] = None
+    consent_fee: bool = False
     category: WorkerCategory
     experience_years: int = 0
     description: Optional[str] = None
@@ -53,6 +55,8 @@ class WorkerUpdate(BaseModel):
     full_name: Optional[str] = None
     phone: Optional[str] = None
     age: Optional[int] = None
+    birth_date: Optional[str] = None
+    consent_fee: Optional[bool] = None
     category: Optional[WorkerCategory] = None
     experience_years: Optional[int] = None
     description: Optional[str] = None

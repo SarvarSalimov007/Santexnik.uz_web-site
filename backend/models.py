@@ -64,6 +64,8 @@ class Worker(Base):
     full_name = Column(String(100), nullable=False)
     phone = Column(String(20), nullable=False)
     age = Column(Integer, nullable=True)
+    birth_date = Column(String(20), nullable=True)
+    consent_fee = Column(Boolean, default=False)
     category = Column(String(30), nullable=False)
     experience_years = Column(Integer, default=0)
     description = Column(Text, nullable=True)

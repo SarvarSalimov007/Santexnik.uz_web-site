@@ -50,6 +50,13 @@ class ApiService {
         });
     }
 
+    async registerWorker(formData) {
+        return this._fetch(`${this.baseUrl}/workers/register`, {
+            method: 'POST',
+            body: formData
+        });
+    }
+
     async updateWorker(id, data) {
         return this._fetch(`${this.baseUrl}/workers/${id}`, {
             method: 'PUT',
