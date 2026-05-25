@@ -5,6 +5,8 @@ from telegram.constants import ParseMode
 import keyboards
 import requests
 from config import API_BASE_URL, SUPER_ADMIN_ID
+from locations import REGIONS_LIST, UZ_LOCATIONS
+
 
 logger = logging.getLogger(__name__)
 
@@ -271,55 +273,48 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data.startswith("cat_"):
         category = data.split("_", 1)[1]
         cat_name = category_names.get(category, "Ustalar")
+        await query.edit_message_text(
+            f"🔍 <b>{cat_name}</b>\n\n📍 Qaysi viloyat/shahardan usta qidiryapsiz?",
+            reply_markup=keyboards.region_keyboard(category),
+            parse_mode=ParseMode.HTML
+        )
+    
+    elif data.startswith("r_"):
+        # Format: r_{region_idx}_{category} or r_all_{category}
+        parts = data.split("_")
+        region_val = parts[1]
+        category = parts[2]
+        cat_name = category_names.get(category, "Ustalar")
         
-        try:
-            response = requests.get(f"{API_BASE_URL}/workers/?category={category}")
-            if response.status_code == 200:
-                workers = response.json()
-                if not workers:
-                    await query.edit_message_text(
-                        f"Bu toifada ({cat_name}) hozircha ustalar yo'q. 😕\n\n"
-                        "Boshqa kategoriyalarni ko'ring:",
-                        reply_markup=keyboards.category_keyboard()
-                    )
-                    return
-                
-                msg = f"🔍 <b>{cat_name}</b>\n\nTopilgan ustalar ({len(workers)} ta):\n\n"
-                for idx, w in enumerate(workers[:5], 1):
-                    verified = " ✅" if w.get('is_verified') else ""
-                    msg += (
-                        f"{idx}. <b>{w['full_name']}</b>{verified}\n"
-                        f"   📍 {w.get('city', 'Kiritilmagan')} | "
-                        f"⭐️ {w['avg_rating']} | "
-                        f"🏗 {w['experience_years']} yil\n\n"
-                    )
-                
-                if len(workers) > 5:
-                    msg += f"... va yana {len(workers) - 5} ta usta.\n"
-                
-                msg += "\nUsta tanlang:"
-                
-                # Create buttons for each worker
-                worker_buttons = []
-                for w in workers[:5]:
-                    worker_buttons.append([
-                        InlineKeyboardButton(
-                            f"👤 {w['full_name']} (⭐️{w['avg_rating']})",
-                            callback_data=f"worker_{w['id']}"
-                        )
-                    ])
-                worker_buttons.append([InlineKeyboardButton("⬅️ Orqaga", callback_data="back_to_categories")])
-                
-                await query.edit_message_text(
-                    msg,
-                    reply_markup=InlineKeyboardMarkup(worker_buttons),
-                    parse_mode=ParseMode.HTML
-                )
-            else:
-                await query.edit_message_text("Server bilan xatolik yuz berdi.")
-        except Exception as e:
-            logger.error(f"Error fetching workers for category {category}: {e}")
-            await query.edit_message_text("Tarmoqda xatolik yuz berdi.")
+        if region_val == "all":
+            await show_workers_list(query, category, cat_name)
+        else:
+            region_idx = int(region_val)
+            region_name = REGIONS_LIST[region_idx]
+            await query.edit_message_text(
+                f"🔍 <b>{cat_name}</b> | 📍 {region_name}\n\n"
+                f"Qaysi tumandan usta qidiryapsiz? Tanlang:",
+                reply_markup=keyboards.district_keyboard(region_idx, category),
+                parse_mode=ParseMode.HTML
+            )
+            
+    elif data.startswith("d_"):
+        # Format: d_{region_idx}_{district_val}_{category} where district_val is index or "all"
+        parts = data.split("_")
+        region_idx = int(parts[1])
+        district_val = parts[2]
+        category = parts[3]
+        cat_name = category_names.get(category, "Ustalar")
+        
+        region_name = REGIONS_LIST[region_idx]
+        
+        if district_val == "all":
+            await show_workers_list(query, category, cat_name, city=region_name)
+        else:
+            district_idx = int(district_val)
+            district_name = UZ_LOCATIONS[region_name][district_idx]
+            await show_workers_list(query, category, cat_name, city=region_name, district=district_name)
+
     
     elif data.startswith("worker_"):
         worker_id = data.split("_")[1]
@@ -449,3 +444,84 @@ async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     await update.message.reply_text(msg, parse_mode=ParseMode.HTML)
+
+
+async def show_workers_list(query, category, cat_name, city=None, district=None):
+    """Helper function to fetch and show workers filtered by category, city, and district."""
+    params = {"category": category}
+    location_str = ""
+    if city:
+        params["city"] = city
+        location_str += f" | 📍 {city}"
+    if district:
+        params["district"] = district
+        location_str += f" ({district})"
+        
+    try:
+        response = requests.get(f"{API_BASE_URL}/workers/", params=params)
+        if response.status_code == 200:
+            workers = response.json()
+            if not workers:
+                msg = f"Bu hududda ({cat_name}{location_str}) hozircha ustalar yo'q. 😕\n\n"
+                if district:
+                    region_idx = REGIONS_LIST.index(city)
+                    reply_markup = keyboards.district_keyboard(region_idx, category)
+                    msg += "Boshqa tuman tanlab ko'ring:"
+                else:
+                    reply_markup = keyboards.region_keyboard(category)
+                    msg += "Boshqa hudud tanlab ko'ring:"
+                    
+                await query.edit_message_text(
+                    msg,
+                    reply_markup=reply_markup
+                )
+                return
+            
+            msg = f"🔍 <b>{cat_name}</b>{location_str}\n\nTopilgan ustalar ({len(workers)} ta):\n\n"
+            for idx, w in enumerate(workers[:5], 1):
+                verified = " ✅" if w.get('is_verified') else ""
+                category_emojis = {
+                    "santexnik": "🚰", "elektrik": "⚡️", "umumiy_tamir": "🔨",
+                    "konditsioner": "❄️", "duradgor": "🪚", "suvaqchi": "🧱",
+                    "plitakash": "🔲", "svarka": "⚙️", "mebel_usta": "🪑",
+                }
+                emoji = category_emojis.get(w['category'], '👨‍🔧')
+                address_str = f" ({w.get('address')})" if w.get('address') else ""
+                msg += (
+                    f"{idx}. <b>{w['full_name']}</b>{verified}\n"
+                    f"   📍 {w.get('city', 'Kiritilmagan')}{address_str} | "
+                    f"⭐️ {w['avg_rating']} | "
+                    f"🏗 {w['experience_years']} yil\n\n"
+                )
+            
+            if len(workers) > 5:
+                msg += f"... va yana {len(workers) - 5} ta usta.\n"
+            
+            msg += "\nUsta tanlang:"
+            
+            worker_buttons = []
+            for w in workers[:5]:
+                worker_buttons.append([
+                    InlineKeyboardButton(
+                        f"👤 {w['full_name']} (⭐️{w['avg_rating']})",
+                        callback_data=f"worker_{w['id']}"
+                    )
+                ])
+                
+            if city:
+                region_idx = REGIONS_LIST.index(city)
+                worker_buttons.append([InlineKeyboardButton("⬅️ Orqaga", callback_data=f"r_{region_idx}_{category}")])
+            else:
+                worker_buttons.append([InlineKeyboardButton("⬅️ Orqaga", callback_data=f"cat_{category}")])
+            
+            await query.edit_message_text(
+                msg,
+                reply_markup=InlineKeyboardMarkup(worker_buttons),
+                parse_mode=ParseMode.HTML
+            )
+        else:
+            await query.edit_message_text("Server bilan xatolik yuz berdi.")
+    except Exception as e:
+        logger.error(f"Error fetching workers: {e}")
+        await query.edit_message_text("Tarmoqda xatolik yuz berdi.")
+

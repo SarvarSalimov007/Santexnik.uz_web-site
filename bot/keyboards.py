@@ -1,4 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from locations import REGIONS_LIST, UZ_LOCATIONS
+
 
 def main_menu_keyboard():
     keyboard = [
@@ -72,3 +74,51 @@ def rating_keyboard(worker_id):
         [InlineKeyboardButton("❌ Bekor qilish", callback_data="cancel_rating")]
     ]
     return InlineKeyboardMarkup(keyboard)
+
+def region_keyboard(category: str):
+    """Build keyboard to select a region/city."""
+    keyboard = []
+    row = []
+    for idx, name in enumerate(REGIONS_LIST):
+        # clean name for display, e.g. "Toshkent shahri" -> "Toshkent sh."
+        display_name = name.replace(" viloyati", " v.").replace(" shahri", " sh.").replace(" Respublikasi", "")
+        row.append(InlineKeyboardButton(display_name, callback_data=f"r_{idx}_{category}"))
+        if len(row) == 2:
+            keyboard.append(row)
+            row = []
+    if row:
+        keyboard.append(row)
+    
+    keyboard.append([
+        InlineKeyboardButton("🌐 Barcha hududlar", callback_data=f"r_all_{category}")
+    ])
+    keyboard.append([
+        InlineKeyboardButton("⬅️ Orqaga", callback_data="back_to_categories")
+    ])
+    return InlineKeyboardMarkup(keyboard)
+
+def district_keyboard(region_idx: int, category: str):
+    """Build keyboard to select a district within a region."""
+    region_name = REGIONS_LIST[region_idx]
+    districts = UZ_LOCATIONS[region_name]
+    
+    keyboard = []
+    row = []
+    for idx, name in enumerate(districts):
+        # clean name for display
+        display_name = name.replace(" tumani", " t.").replace(" shahri", " sh.")
+        row.append(InlineKeyboardButton(display_name, callback_data=f"d_{region_idx}_{idx}_{category}"))
+        if len(row) == 2:
+            keyboard.append(row)
+            row = []
+    if row:
+        keyboard.append(row)
+        
+    keyboard.append([
+        InlineKeyboardButton("🌐 Butun viloyat bo'ylab", callback_data=f"d_{region_idx}_all_{category}")
+    ])
+    keyboard.append([
+        InlineKeyboardButton("⬅️ Orqaga", callback_data=f"cat_{category}") # go back to region select (which is triggered by cat_<category>)
+    ])
+    return InlineKeyboardMarkup(keyboard)
+

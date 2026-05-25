@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Santexnik.uz</title>
+    <title>Admin Dashboard - Santexnik.uz</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        body { background: var(--bg-secondary); }
         .admin-sidebar {
-            width: 260px;
+            width: 280px;
             background: var(--bg-dark);
             height: 100vh;
             position: fixed;
@@ -17,103 +17,144 @@
             top: 0;
             padding: 30px 20px;
             color: #fff;
+            z-index: 100;
+            transition: all 0.3s;
+            border-right: 1px solid var(--border);
         }
         .admin-main {
-            margin-left: 260px;
+            margin-left: 280px;
             padding: 40px;
-            background: #f8fafc;
             min-height: 100vh;
+            transition: all 0.3s;
         }
         .admin-nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 18px;
+            gap: 14px;
+            padding: 14px 20px;
             border-radius: var(--radius-md);
             margin-bottom: 8px;
-            color: #9ca3af;
+            color: var(--text-muted);
             transition: all 0.3s;
             cursor: pointer;
+            font-weight: 500;
         }
         .admin-nav-item:hover, .admin-nav-item.active {
             background: var(--primary);
             color: #fff;
+            box-shadow: var(--shadow-glow);
         }
+        .admin-nav-item i { font-size: 1.1rem; width: 24px; text-align: center; }
         .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 40px;
+            background: var(--surface);
+            padding: 24px 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
         }
         .admin-stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
             margin-bottom: 40px;
         }
         .stat-card {
-            background: #fff;
-            padding: 24px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
+            background: var(--surface);
+            padding: 28px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
             border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-glow);
+            color: var(--primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
         }
         .stat-card h3 {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+            font-family: inherit;
         }
         .stat-card .value {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
             color: var(--text);
+            font-family: 'Outfit', sans-serif;
         }
         .admin-card {
-            background: #fff;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
             border: 1px solid var(--border);
             overflow: hidden;
+            margin-bottom: 30px;
         }
         .card-header {
-            padding: 20px 24px;
+            padding: 24px 32px;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+        .card-header h2 { font-size: 1.3rem; margin: 0; }
         .admin-table {
             width: 100%;
             border-collapse: collapse;
         }
         .admin-table th {
             text-align: left;
-            padding: 16px 24px;
-            background: #f8fafc;
+            padding: 18px 32px;
+            background: var(--bg-tertiary);
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
         }
         .admin-table td {
-            padding: 16px 24px;
+            padding: 18px 32px;
             border-bottom: 1px solid var(--border);
             font-size: 0.95rem;
+            color: var(--text);
+            vertical-align: middle;
         }
+        .admin-table tbody tr:hover { background: var(--surface-hover); }
         .status-badge {
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: var(--radius-full);
             font-size: 0.8rem;
             font-weight: 600;
+            display: inline-block;
         }
-        .status-active { background: #dcfce7; color: #166534; }
+        .status-active { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .status-inactive { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .status-pending { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
         .action-btns {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
         .btn-icon {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -121,39 +162,64 @@
             cursor: pointer;
             transition: all 0.2s;
             border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
         }
-        .btn-edit { background: #eef2ff; color: var(--primary); }
-        .btn-delete { background: #fee2e2; color: var(--danger); }
-        
+        .btn-icon:hover { transform: translateY(-2px); }
+        .btn-edit:hover { background: var(--primary); color: #fff; box-shadow: var(--shadow-glow); }
+        .btn-delete:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+        .btn-check:hover { background: var(--success); color: #fff; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+
+        .tab-content { display: none; animation: fadeIn 0.4s var(--ease); }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (max-width: 1024px) {
             .admin-sidebar { width: 80px; padding: 30px 10px; }
             .admin-sidebar .logo span, .admin-sidebar .admin-nav-item span { display: none; }
-            .admin-main { margin-left: 80px; }
-            .admin-stats { grid-template-columns: repeat(2, 1fr); }
+            .admin-main { margin-left: 80px; padding: 24px; }
+            .admin-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .admin-table { display: block; overflow-x: auto; }
+        }
+        @media (max-width: 768px) {
+            .admin-sidebar { 
+                width: 100%; 
+                height: auto; 
+                position: relative; 
+                padding: 15px 20px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .admin-sidebar .logo { margin-bottom: 0; }
+            .admin-sidebar .admin-nav-item { margin-bottom: 0; padding: 10px; }
+            .admin-main { margin-left: 0; padding: 16px; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 16px; }
         }
     </style>
 </head>
 <body>
     <div class="admin-sidebar">
-        <div class="logo" style="color:#fff; margin-bottom: 50px;">
+        <div class="logo" style="color:#fff; margin-bottom: 50px; padding-left: 10px;">
             <i class="fa-solid fa-wrench"></i>
             <span>Santexnik<span>.uz</span></span>
         </div>
-        <div class="admin-nav-item active">
+        <div class="admin-nav-item active" data-tab="dashboard">
             <i class="fa-solid fa-chart-line"></i>
             <span>Dashboard</span>
         </div>
-        <div class="admin-nav-item">
+        <div class="admin-nav-item" data-tab="workers">
             <i class="fa-solid fa-users"></i>
             <span>Ustalar</span>
         </div>
-        <div class="admin-nav-item">
+        <div class="admin-nav-item" data-tab="leads">
             <i class="fa-solid fa-envelope"></i>
             <span>So'rovlar</span>
         </div>
-        <div class="admin-nav-item">
-            <i class="fa-solid fa-gear"></i>
-            <span>Sozlamalar</span>
+        <div class="admin-nav-item" id="themeToggleBtn">
+            <i class="fa-solid fa-moon"></i>
+            <span>Mavzuni o'zgartirish</span>
         </div>
         <div style="position: absolute; bottom: 30px; left: 20px; right: 20px;">
             <div class="admin-nav-item" id="logoutBtn">
@@ -166,105 +232,232 @@
     <main class="admin-main">
         <div class="admin-header">
             <div>
-                <h1 style="font-size: 1.8rem; margin-bottom: 4px;">Xush kelibsiz, Sarvar!</h1>
-                <p style="color: var(--text-muted);">Platforma holati va boshqaruv paneli</p>
+                <h1 style="font-size: 1.8rem; margin-bottom: 6px; font-family: 'Outfit', sans-serif;">Boshqaruv paneli</h1>
+                <p style="color: var(--text-muted);"><span id="adminNameDisplay">Admin</span>, platformaga xush kelibsiz</p>
             </div>
-            <div style="display: flex; gap: 15px; align-items: center;">
+            <div style="display: flex; gap: 16px; align-items: center;">
                 <div style="text-align: right;">
-                    <p style="font-weight: 600;">Sarvar Salimov</p>
+                    <p style="font-weight: 600; color: var(--text);" id="adminProfileName">Admin</p>
                     <p style="font-size: 0.8rem; color: var(--text-muted);">Super Admin</p>
                 </div>
-                <div style="width: 45px; height: 45px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700;">S</div>
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.2rem; box-shadow: var(--shadow-glow);">A</div>
             </div>
         </div>
 
-        <div class="admin-stats">
-            <div class="stat-card">
-                <h3>Jami ustalar</h3>
-                <div class="value">124</div>
+        <!-- Dashboard Tab -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <h3>Jami ustalar</h3>
+                        <div class="value" id="dashTotalWorkers">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--success); background: rgba(16, 185, 129, 0.15);"><i class="fa-solid fa-comments"></i></div>
+                    <div>
+                        <h3>Jami izohlar</h3>
+                        <div class="value" id="dashTotalReviews">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--warning); background: rgba(245, 158, 11, 0.15);"><i class="fa-solid fa-star"></i></div>
+                    <div>
+                        <h3>O'rtacha reyting</h3>
+                        <div class="value" id="dashAvgRating">0.0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--danger); background: rgba(239, 68, 68, 0.15);"><i class="fa-solid fa-envelope"></i></div>
+                    <div>
+                        <h3>Yangi so'rovlar</h3>
+                        <div class="value" id="dashPendingLeads">0</div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <h3>Yangi so'rovlar</h3>
-                <div class="value">12</div>
-            </div>
-            <div class="stat-card">
-                <h3>O'rtacha reyting</h3>
-                <div class="value">4.8</div>
-            </div>
-            <div class="stat-card">
-                <h3>Daromad (oylik)</h3>
-                <div class="value">4.5M</div>
+
+            <div class="admin-card">
+                <div class="card-header">
+                    <h2>Yaqinda qo'shilgan ustalar</h2>
+                    <button class="btn btn-outline btn-sm" onclick="switchTab('workers')">Barchasini ko'rish <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Usta</th>
+                            <th>Kategoriya</th>
+                            <th>Hudud</th>
+                            <th>Reyting</th>
+                            <th>Holati</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashWorkersList">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="admin-card">
-            <div class="card-header">
-                <h2 style="font-size: 1.2rem;">Yaqinda qo'shilgan ustalar</h2>
-                <button class="btn btn-primary btn-sm" style="padding: 8px 16px; font-size: 0.85rem;">+ Yangi usta</button>
+        <!-- Workers Tab -->
+        <div id="tab-workers" class="tab-content">
+            <div class="admin-card">
+                <div class="card-header">
+                    <h2>Barcha Ustalar</h2>
+                    <button class="btn btn-primary" onclick="openWorkerModal()"><i class="fa-solid fa-plus"></i> Yangi usta qo'shish</button>
+                </div>
+                <div style="padding: 20px 32px; border-bottom: 1px solid var(--border); display: flex; gap: 16px;">
+                    <div class="search-box" style="margin: 0; max-width: 400px; padding: 4px 16px; border-radius: var(--radius-md); box-shadow: none;">
+                        <i class="fa-solid fa-search" style="color: var(--text-muted);"></i>
+                        <input type="text" id="workerSearchInput" placeholder="Ism bo'yicha qidirish..." style="border: none; background: transparent; color: var(--text); outline: none; width: 100%; padding: 8px;">
+                    </div>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usta</th>
+                            <th>Kategoriya</th>
+                            <th>Telefon</th>
+                            <th>Holati</th>
+                            <th>Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminWorkersList">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Usta</th>
-                        <th>Kategoriya</th>
-                        <th>Hudud</th>
-                        <th>Reyting</th>
-                        <th>Holati</th>
-                        <th>Amallar</th>
-                    </tr>
-                </thead>
-                <tbody id="adminWorkersList">
-                    <!-- Will be populated by JS -->
-                </tbody>
-            </table>
+        </div>
+
+        <!-- Leads/Contacts Tab -->
+        <div id="tab-leads" class="tab-content">
+            <div class="admin-card">
+                <div class="card-header">
+                    <h2>Mijozlar So'rovlari</h2>
+                    <div style="display: flex; gap: 10px;">
+                        <span class="status-badge status-pending">Yangi: <span id="leadsPendingCount">0</span></span>
+                    </div>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mijoz</th>
+                            <th>Telefon</th>
+                            <th>Kategoriya</th>
+                            <th>Xabar</th>
+                            <th>Sana</th>
+                            <th>Holat</th>
+                            <th>Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminLeadsList">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
-    <script src="js/locations.js"></script>
+    <!-- Worker Add/Edit Modal -->
+    <div id="adminWorkerModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close-modal">&times;</span>
+            <h2 id="workerModalTitle" style="margin-bottom:24px; font-family:'Outfit',sans-serif;">Yangi usta qo'shish</h2>
+            <form id="adminWorkerForm">
+                <input type="hidden" id="w_id">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="w_full_name">To'liq ism-sharifi</label>
+                        <input type="text" id="w_full_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="w_phone">Telefon raqami</label>
+                        <input type="text" id="w_phone" placeholder="+998..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="w_category">Kategoriya</label>
+                        <select id="w_category" required>
+                            <option value="santexnik">Santexnik</option>
+                            <option value="elektrik">Elektrik</option>
+                            <option value="umumiy_tamir">Ta'mirlash</option>
+                            <option value="konditsioner">Konditsioner</option>
+                            <option value="duradgor">Duradgor</option>
+                            <option value="svarka">Svarka</option>
+                            <option value="suvaqchi">Suvaqchi</option>
+                            <option value="plitakash">Plitakash</option>
+                            <option value="mebel_usta">Mebel ustasi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="w_experience_years">Tajriba (yil)</label>
+                        <input type="number" id="w_experience_years" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="w_city">Viloyat / Shahar</label>
+                        <select id="w_city">
+                            <option value="">Tanlang...</option>
+                            <option value="Toshkent shahri">Toshkent shahri</option>
+                            <option value="Toshkent viloyati">Toshkent viloyati</option>
+                            <option value="Samarqand viloyati">Samarqand viloyati</option>
+                            <option value="Buxoro viloyati">Buxoro viloyati</option>
+                            <option value="Andijon viloyati">Andijon viloyati</option>
+                            <option value="Farg'ona viloyati">Farg'ona viloyati</option>
+                            <option value="Namangan viloyati">Namangan viloyati</option>
+                            <option value="Xorazm viloyati">Xorazm viloyati</option>
+                            <option value="Navoiy viloyati">Navoiy viloyati</option>
+                            <option value="Qashqadaryo viloyati">Qashqadaryo viloyati</option>
+                            <option value="Surxondaryo viloyati">Surxondaryo viloyati</option>
+                            <option value="Sirdaryo viloyati">Sirdaryo viloyati</option>
+                            <option value="Jizzax viloyati">Jizzax viloyati</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="w_address">Tuman / Manzil</label>
+                        <input type="text" id="w_address">
+                    </div>
+                    <div class="form-group">
+                        <label for="w_price_range">Narx (Masalan: Kelishilgan, yoki 50000+)</label>
+                        <input type="text" id="w_price_range">
+                    </div>
+                    <div class="form-group">
+                        <label for="w_telegram_username">Telegram username (sizsiz @)</label>
+                        <input type="text" id="w_telegram_username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="w_description">Qisqacha ma'lumot</label>
+                    <textarea id="w_description" rows="3"></textarea>
+                </div>
+                <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text);">
+                        <input type="checkbox" id="w_is_active" checked style="width: auto;"> Faol
+                    </label>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                    <button type="button" class="btn btn-outline" onclick="closeModals()">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary" id="saveWorkerBtn">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirmDeleteModal" class="modal">
+        <div class="modal-content auth-modal text-center">
+            <span class="close-modal">&times;</span>
+            <div style="font-size: 3rem; color: var(--danger); margin-bottom: 16px;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h2 style="margin-bottom:12px; font-family:'Outfit',sans-serif;">Haqiqatan ham o'chirasizmi?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Bu amalni bekor qilib bo'lmaydi. Usta va uning barcha izohlari tizimdan o'chiriladi.</p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-outline w-100" onclick="closeModals()">Bekor qilish</button>
+                <button class="btn btn-primary w-100" style="background: var(--danger); box-shadow: 0 4px 14px rgba(239,68,68,0.3);" id="confirmDeleteBtn">O'chirish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="js/api.js"></script>
-    <script>
-        // Simple security check for demo
-        if (!localStorage.getItem('access_token')) {
-            window.location.href = 'index.html';
-        }
-
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('admin_user');
-            window.location.href = 'index.html';
-        });
-
-        // Mock data rendering
-        const DUMMY_WORKERS = [
-            { id:1, full_name:'Azamat Toshmatov', category:'Santexnik', city:'Toshkent', avg_rating:4.9, is_active: true },
-            { id:2, full_name:'Bobur Aliyev', category:'Elektrik', city:'Toshkent', avg_rating:4.7, is_active: true },
-            { id:3, full_name:'Sanjar Karimberdiyev', category:'Ta\'mirchi', city:'Samarqand', avg_rating:5.0, is_active: true },
-            { id:4, full_name:'Dilshod Rahmatov', category:'Konditsioner', city:'Toshkent', avg_rating:4.5, is_active: true }
-        ];
-
-        const list = document.getElementById('adminWorkersList');
-        DUMMY_WORKERS.forEach(w => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 32px; height: 32px; background: #eef2ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 0.8rem;"><i class="fa-solid fa-user"></i></div>
-                        ${w.full_name}
-                    </div>
-                </td>
-                <td>${w.category}</td>
-                <td>${w.city}</td>
-                <td><i class="fa-solid fa-star" style="color: #f59e0b;"></i> ${w.avg_rating}</td>
-                <td><span class="status-badge status-active">Faol</span></td>
-                <td>
-                    <div class="action-btns">
-                        <button class="btn-icon btn-edit"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn-icon btn-delete"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </td>
-            `;
-            list.appendChild(tr);
-        });
-    </script>
+    <script src="js/admin.js"></script>
 </body>
 </html>

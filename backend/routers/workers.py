@@ -13,6 +13,7 @@ def get_workers(
     limit: int = 100, 
     category: Optional[str] = None,
     city: Optional[str] = None,
+    district: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     """Get list of workers, optionally filtered."""
@@ -21,6 +22,8 @@ def get_workers(
         query = query.filter(models.Worker.category == category)
     if city:
         query = query.filter(models.Worker.city.ilike(f"%{city}%"))
+    if district:
+        query = query.filter(models.Worker.address.ilike(f"%{district}%"))
     
     # Order by rating descending by default
     workers = query.order_by(desc(models.Worker.avg_rating)).offset(skip).limit(limit).all()
@@ -105,6 +108,20 @@ def create_review(
     db.commit()
     
     return new_review
+
+@router.delete("/{worker_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_worker(
+    worker_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_admin_user)
+):
+    """Delete a worker (Admin only)."""
+    db_worker = db.query(models.Worker).filter(models.Worker.id == worker_id).first()
+    if not db_worker:
+        raise HTTPException(status_code=404, detail="Worker not found")
+    db.delete(db_worker)
+    db.commit()
+    return None
 
 @router.get("/{worker_id}/reviews", response_model=List[schemas.ReviewResponse])
 def get_worker_reviews(worker_id: int, skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):

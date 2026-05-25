@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Santexnik.uz - Professional Ustalar Platformasi</title>
-    <meta name="description" content="O'zbekistondagi eng yaxshi santexnik, elektrik va boshqa turdagi ustalarni toping. Reytingli va ishonchli xizmatlar.">
+    <title>Santexnik.uz — O'zbekistondagi eng ishonchli ustalar platformasi</title>
+    <meta name="description" content="O'zbekistondagi eng yaxshi santexnik, elektrik va boshqa turdagi ustalarni toping. Reytingli, tasdiqlangan va ishonchli xizmatlar. Tez, qulay, bepul!">
+    <meta name="keywords" content="santexnik, elektrik, usta, ta'mirlash, o'zbekiston, toshkent, ustalar, remont, konditsioner, plitka">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <!-- Navbar -->
@@ -25,8 +25,19 @@
                 <a href="#contact">Bog'lanish</a>
             </div>
             <div class="nav-actions">
-                <button id="loginBtn" class="btn btn-outline">Kirish</button>
-                <a href="https://t.me/SantexnikUz_bot" target="_blank" class="btn btn-primary">
+                <div class="theme-switcher" id="themeSwitcher">
+                    <button class="theme-btn active" data-theme="light" title="Yorug' rejim">
+                        <i class="fa-solid fa-sun"></i>
+                    </button>
+                    <button class="theme-btn" data-theme="dark" title="Qorong'i rejim">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button class="theme-btn" data-theme="cyber" title="Kiber rejim">
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </div>
+                <button id="loginBtn" class="btn btn-outline btn-sm">Kirish</button>
+                <a href="https://t.me/SantexnikUz_bot" target="_blank" class="btn btn-primary btn-sm">
                     <i class="fa-brands fa-telegram"></i> Bot
                 </a>
             </div>
@@ -46,26 +57,35 @@
         <a href="#about">Qanday ishlaydi</a>
         <a href="#contact">Bog'lanish</a>
         <a href="https://t.me/SantexnikUz_bot" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram Bot</a>
+        <div style="display: flex; gap: 8px; padding-top: 20px;">
+            <button class="theme-btn" data-theme="light" title="Yorug'"><i class="fa-solid fa-sun"></i></button>
+            <button class="theme-btn" data-theme="dark" title="Qorong'i"><i class="fa-solid fa-moon"></i></button>
+            <button class="theme-btn" data-theme="cyber" title="Kiber"><i class="fa-solid fa-bolt"></i></button>
+        </div>
     </div>
 
     <!-- Hero Section -->
     <header id="home" class="hero">
         <div class="container hero-container">
             <div class="hero-content">
-                <h1>Ishonchli va tajribali <span class="highlight">ustalarni</span> toping</h1>
+                <h1>Ishonchli va tajribali <span class="gradient-text">ustalarni</span> toping</h1>
                 <p>Uyingizdagi har qanday muammoni hal qilish uchun O'zbekistondagi eng yaxshi mutaxassislarni tez va oson toping. Sifat kafolatlangan!</p>
-                <div class="search-box">
+                <div class="search-box" id="searchBox">
                     <div class="search-input-group">
                         <i class="fa-solid fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Qanday usta kerak? (masalan: Santexnik)">
+                        <input type="text" id="searchInput" placeholder="Qanday usta kerak? (masalan: Santexnik)" autocomplete="off">
                     </div>
                     <select id="citySelect" class="city-select">
                         <option value="">Barcha viloyatlar</option>
                     </select>
-                    <select id="districtSelect" class="city-select" style="border-left: 1px solid var(--border)">
+                    <select id="districtSelect" class="city-select">
                         <option value="">Barcha tumanlar</option>
                     </select>
-                    <button id="searchBtn" class="btn btn-primary search-btn">Izlash</button>
+                    <button id="searchBtn" class="btn btn-primary search-btn">
+                        <i class="fa-solid fa-search"></i> Izlash
+                    </button>
+                    <!-- Search Suggestions -->
+                    <div class="search-suggestions" id="searchSuggestions"></div>
                 </div>
             </div>
             <div class="hero-image">
@@ -109,43 +129,43 @@
                 <h2>Xizmat turlari</h2>
                 <p>O'zingizga kerakli mutaxassislikni tanlang</p>
             </div>
-            <div class="category-grid" id="categoryGrid">
-                <div class="category-card fade-up" data-category="santexnik">
+            <div class="category-grid stagger-children fade-up" id="categoryGrid">
+                <div class="category-card" data-category="santexnik">
                     <div class="icon-wrapper"><i class="fa-solid fa-faucet-drip"></i></div>
                     <h3>Santexnika</h3>
                     <p>Quvurlar, kranlar, isitish tizimlari</p>
                 </div>
-                <div class="category-card fade-up" data-category="elektrik">
+                <div class="category-card" data-category="elektrik">
                     <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
                     <h3>Elektrika</h3>
                     <p>Simlar, rozetkalar, yoritish</p>
                 </div>
-                <div class="category-card fade-up" data-category="umumiy_tamir">
+                <div class="category-card" data-category="umumiy_tamir">
                     <div class="icon-wrapper"><i class="fa-solid fa-hammer"></i></div>
                     <h3>Ta'mirlash</h3>
                     <p>Uyni to'liq yoki qisman ta'mirlash</p>
                 </div>
-                <div class="category-card fade-up" data-category="konditsioner">
+                <div class="category-card" data-category="konditsioner">
                     <div class="icon-wrapper"><i class="fa-solid fa-snowflake"></i></div>
                     <h3>Konditsioner</h3>
                     <p>O'rnatish, tozalash, ta'mirlash</p>
                 </div>
-                <div class="category-card fade-up" data-category="duradgor">
+                <div class="category-card" data-category="duradgor">
                     <div class="icon-wrapper"><i class="fa-solid fa-screwdriver-wrench"></i></div>
                     <h3>Duradgorlik</h3>
                     <p>Eshik, deraza, yog'och ishlari</p>
                 </div>
-                <div class="category-card fade-up" data-category="svarka">
+                <div class="category-card" data-category="svarka">
                     <div class="icon-wrapper"><i class="fa-solid fa-fire"></i></div>
                     <h3>Svarka ishlari</h3>
                     <p>Darvoza, panjara, metall</p>
                 </div>
-                <div class="category-card fade-up" data-category="suvaqchi">
+                <div class="category-card" data-category="suvaqchi">
                     <div class="icon-wrapper"><i class="fa-solid fa-trowel-bricks"></i></div>
                     <h3>Suvaq ishlari</h3>
                     <p>Devor tekislash, dekorativ suvoq</p>
                 </div>
-                <div class="category-card fade-up" data-category="plitakash">
+                <div class="category-card" data-category="plitakash">
                     <div class="icon-wrapper"><i class="fa-solid fa-border-all"></i></div>
                     <h3>Plitka terish</h3>
                     <p>Hammom, oshxona, pol kafel</p>
@@ -246,6 +266,8 @@
                         <option value="konditsioner">Konditsioner</option>
                         <option value="duradgor">Duradgor</option>
                         <option value="svarka">Svarka</option>
+                        <option value="suvaqchi">Suvaqchi</option>
+                        <option value="plitakash">Plitakash</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -267,10 +289,10 @@
                 </a>
                 <p>O'zbekistondagi eng ishonchli ustalar qidiruvi platformasi. Biz bilan uyingiz doim soz!</p>
                 <div class="social-links">
-                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
                 </div>
             </div>
             <div class="footer-links">
@@ -306,7 +328,7 @@
     <div id="loginModal" class="modal">
         <div class="modal-content auth-modal">
             <span class="close-modal">&times;</span>
-            <h2 style="margin-bottom:24px">Admin panelga kirish</h2>
+            <h2 style="margin-bottom:24px; font-family:'Outfit',sans-serif;">Admin panelga kirish</h2>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="username">Foydalanuvchi nomi</label>
@@ -319,7 +341,7 @@
                         <i class="fa-solid fa-eye-slash toggle-password" id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-muted);"></i>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Kirish</button>
+                <button type="submit" class="btn btn-primary w-100" style="padding:14px;">Kirish</button>
             </form>
         </div>
     </div>
