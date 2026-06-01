@@ -17,10 +17,13 @@ def get_workers(
     category: Optional[str] = None,
     city: Optional[str] = None,
     district: Optional[str] = None,
+    include_inactive: bool = Query(False),
     db: Session = Depends(get_db)
 ):
     """Get list of workers, optionally filtered."""
-    query = db.query(models.Worker).filter(models.Worker.is_active == True)
+    query = db.query(models.Worker)
+    if not include_inactive:
+        query = query.filter(models.Worker.is_active == True)
     if category:
         query = query.filter(models.Worker.category == category)
     if city:

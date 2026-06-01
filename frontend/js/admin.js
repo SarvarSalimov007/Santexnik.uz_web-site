@@ -155,7 +155,7 @@ async function loadDashboardData() {
         document.getElementById('dashPendingLeads').textContent = pendingCount;
         
         // Recent workers
-        const workers = await api.getWorkers();
+        const workers = await api.getWorkers({ include_inactive: true });
         adminState.workers = workers;
         renderRecentWorkers(workers.slice(0, 5));
 
@@ -170,7 +170,7 @@ async function loadDashboardData() {
 
 async function loadWorkersData() {
     try {
-        adminState.workers = await api.getWorkers();
+        adminState.workers = await api.getWorkers({ include_inactive: true });
         renderWorkersTable();
     } catch (e) {
         showToast('Ustalarni yuklashda xatolik', 'error');
@@ -230,8 +230,13 @@ function renderWorkersTable(filterText = '') {
     }
 
     filtered.forEach(w => {
+        const rowStyle = w.is_active ? '' : 'style="background: rgba(245, 158, 11, 0.08);"';
+        const approveBtn = w.is_active 
+            ? '' 
+            : `<button class="btn-icon btn-check" title="Tasdiqlash (Faollashtirish)" onclick="activateWorker(${w.id})"><i class="fa-solid fa-check"></i></button>`;
+
         tbody.innerHTML += `
-            <tr>
+            <tr ${rowStyle}>
                 <td style="color:var(--text-muted);">#${w.id}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 12px;">
@@ -241,9 +246,10 @@ function renderWorkersTable(filterText = '') {
                 </td>
                 <td><span style="background:var(--bg-tertiary); padding:4px 10px; border-radius:20px; font-size:0.8rem;">${getCategoryName(w.category)}</span></td>
                 <td>${w.phone}</td>
-                <td>${w.is_active ? '<span class="status-badge status-active">Faol</span>' : '<span class="status-badge status-inactive">Nofaol</span>'}</td>
+                <td>${w.is_active ? '<span class="status-badge status-active">Faol</span>' : '<span class="status-badge status-pending">Kutmoqda</span>'}</td>
                 <td>
                     <div class="action-btns">
+                        ${approveBtn}
                         <button class="btn-icon btn-edit" title="Tahrirlash" onclick="openWorkerModal(${w.id})"><i class="fa-solid fa-pen"></i></button>
                         <button class="btn-icon btn-delete" title="O'chirish" onclick="confirmDelete(${w.id})"><i class="fa-solid fa-trash"></i></button>
                     </div>
@@ -390,5 +396,18 @@ window.processLead = async function(id) {
         loadDashboardData();
     } catch (e) {
         showToast('Xatolik yuz berdi', 'error');
+    }
+};
+
+// ===== Activate Worker Action =====
+
+window.activateWorker = async function(id) {
+    try {
+        await api.updateWorker(id, { is_active: true });
+        showToast('Usta muvaffaqiyatli faollashtirildi (tasdiqlandi)!', 'success');
+        loadWorkersData();
+        loadDashboardData();
+    } catch (e) {
+        showToast('Faollashtirishda xatolik yuz berdi: ' + e.message, 'error');
     }
 };
