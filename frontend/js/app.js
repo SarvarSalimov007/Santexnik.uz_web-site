@@ -34,6 +34,7 @@ let appState = { workers: [], currentCategory: 'all', currentSort: 'rating' };
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
+    initLanguageSwitcher();
     initApp();
     initScrollAnimations();
     initMobileMenu();
@@ -51,26 +52,78 @@ function initApp() {
     setupContactForm();
 }
 
-// ===== Theme System =====
+// ===== Theme System (Single Cycle Button) =====
+const THEME_ORDER = ['light', 'dark', 'cyber'];
+const THEME_ICONS = { light: 'fa-sun', dark: 'fa-moon', cyber: 'fa-bolt' };
+const THEME_LABELS = {
+    light: { uz: "Yorug' rejim", uz_cyrl: "Ёруғ режим", en: "Light mode", ru: "Светлый режим", tj: "Реҷаи равшан" },
+    dark: { uz: "Qorong'i rejim", uz_cyrl: "Қоронғи режим", en: "Dark mode", ru: "Тёмный режим", tj: "Реҷаи торик" },
+    cyber: { uz: "Kiber rejim", uz_cyrl: "Кибер режим", en: "Cyber mode", ru: "Кибер режим", tj: "Реҷаи кибер" }
+};
+
 function initTheme() {
     const saved = localStorage.getItem('santexnik-theme') || 'light';
     applyTheme(saved);
 
-    // All theme buttons (navbar + mobile menu)
-    document.querySelectorAll('[data-theme]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const theme = btn.dataset.theme;
-            applyTheme(theme);
-            localStorage.setItem('santexnik-theme', theme);
+    // Desktop cycle button
+    const cycleBtn = document.getElementById('themeCycleBtn');
+    if (cycleBtn) {
+        cycleBtn.addEventListener('click', () => {
+            cycleTheme();
         });
-    });
+    }
+
+    // Mobile cycle button
+    const mobileCycleBtn = document.getElementById('mobileThemeCycleBtn');
+    if (mobileCycleBtn) {
+        mobileCycleBtn.addEventListener('click', () => {
+            cycleTheme();
+        });
+    }
+}
+
+function cycleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const currentIndex = THEME_ORDER.indexOf(current);
+    const nextIndex = (currentIndex + 1) % THEME_ORDER.length;
+    const nextTheme = THEME_ORDER[nextIndex];
+    applyTheme(nextTheme);
+    localStorage.setItem('santexnik-theme', nextTheme);
 }
 
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    document.querySelectorAll('[data-theme]').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.theme === theme);
-    });
+    const icon = THEME_ICONS[theme] || 'fa-sun';
+    const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'uz';
+    const label = (THEME_LABELS[theme] && THEME_LABELS[theme][lang]) || THEME_LABELS[theme]?.uz || theme;
+
+    // Update desktop button icon
+    const cycleBtn = document.getElementById('themeCycleBtn');
+    if (cycleBtn) {
+        const iconEl = cycleBtn.querySelector('i');
+        if (iconEl) {
+            iconEl.className = `fa-solid ${icon}`;
+        }
+        cycleBtn.title = label;
+    }
+
+    // Update mobile button icon and text
+    const mobileCycleBtn = document.getElementById('mobileThemeCycleBtn');
+    if (mobileCycleBtn) {
+        const iconEl = mobileCycleBtn.querySelector('i');
+        if (iconEl) {
+            iconEl.className = `fa-solid ${icon}`;
+        }
+        // Find the next theme to show what clicking will switch to
+        const nextIndex = (THEME_ORDER.indexOf(theme) + 1) % THEME_ORDER.length;
+        const nextTheme = THEME_ORDER[nextIndex];
+        const nextLabel = (THEME_LABELS[nextTheme] && THEME_LABELS[nextTheme][lang]) || THEME_LABELS[nextTheme]?.uz || nextTheme;
+        const spanEl = mobileCycleBtn.querySelector('span');
+        if (spanEl) {
+            spanEl.textContent = label;
+        }
+        mobileCycleBtn.title = label;
+    }
 }
 
 // ===== Locations =====
@@ -131,7 +184,8 @@ function initLocations() {
 // ===== Data Fetching =====
 async function fetchWorkers() {
     const grid = document.getElementById('workersGrid');
-    grid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Ustalar yuklanmoqda...</p></div>';
+    const loadingText = typeof t === 'function' ? t('loading_workers') : 'Ustalar yuklanmoqda...';
+    grid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><p>${loadingText}</p></div>`;
     try {
         appState.workers = await api.getWorkers();
     } catch (e) {
@@ -186,7 +240,6 @@ function animateCounter(id, target, isFloat = false) {
     requestAnimationFrame(update);
 }
 
-// ===== Rendering =====
 function renderWorkers() {
     const grid = document.getElementById('workersGrid');
     grid.innerHTML = '';
@@ -198,7 +251,7 @@ function renderWorkers() {
     else if (appState.currentSort === 'experience') filtered.sort((a, b) => b.experience_years - a.experience_years);
 
     if (!filtered.length) {
-        grid.innerHTML = '<p class="text-center w-100 mt-4" style="color:var(--text-muted);grid-column:1/-1;">Bu toifada ustalar topilmadi.</p>';
+        grid.innerHTML = `<p class="text-center w-100 mt-4" style="color:var(--text-muted);grid-column:1/-1;">${typeof t === 'function' ? t('no_workers_found') : 'Bu toifada ustalar topilmadi.'}</p>`;
         return;
     }
     filtered.forEach((w, i) => {
@@ -221,12 +274,20 @@ function createWorkerCard(worker) {
     const div = document.createElement('div');
     div.className = 'worker-card';
     const catName = CATEGORY_NAMES[worker.category] || worker.category;
-    const verified = worker.is_verified ? '<i class="fa-solid fa-circle-check verified-badge" title="Tasdiqlangan"></i>' : '';
+    const verifiedTitle = typeof t === 'function' ? t('verified') : 'Tasdiqlangan';
+    const verified = worker.is_verified ? `<i class="fa-solid fa-circle-check verified-badge" title="${verifiedTitle}"></i>` : '';
     const avatar = worker.photo_url
         ? `<img src="${worker.photo_url}" alt="${worker.full_name}" class="worker-avatar">`
         : `<div class="worker-avatar"><i class="fa-solid fa-user"></i></div>`;
     
     const starsHtml = generateStarsHtml(worker.avg_rating);
+    const yearsText = typeof t === 'function' ? t('worker_years') : 'yil';
+    const reviewsText = typeof t === 'function' ? t('worker_reviews') : 'ta izoh';
+    const notEntered = typeof t === 'function' ? t('worker_not_entered') : 'Kiritilmagan';
+    const agreed = typeof t === 'function' ? t('worker_agreed') : 'Kelishilgan';
+    const viewProfile = typeof t === 'function' ? t('worker_view_profile') : "Profilni ko'rish";
+    const callText = typeof t === 'function' ? t('worker_call') : 'Chaqirish';
+    const noInfo = typeof t === 'function' ? t('worker_no_info') : "Qisqacha ma'lumot kiritilmagan.";
 
     div.innerHTML = `
         <div class="worker-header">
@@ -237,20 +298,20 @@ function createWorkerCard(worker) {
                 <div class="worker-rating">
                     ${starsHtml}
                     <strong>${worker.avg_rating.toFixed(1)}</strong>
-                    <span style="color:var(--text-muted)">(${worker.total_reviews} ta izoh)</span>
+                    <span style="color:var(--text-muted)">(${worker.total_reviews} ${reviewsText})</span>
                 </div>
             </div>
         </div>
         <div class="worker-body">
             <div class="worker-meta">
-                <div><i class="fa-solid fa-briefcase"></i> ${worker.experience_years} yil</div>
-                <div><i class="fa-solid fa-location-dot"></i> ${worker.city || 'Kiritilmagan'}</div>
-                <div><i class="fa-solid fa-coins"></i> ${worker.price_range || 'Kelishilgan'}</div>
+                <div><i class="fa-solid fa-briefcase"></i> ${worker.experience_years} ${yearsText}</div>
+                <div><i class="fa-solid fa-location-dot"></i> ${worker.city || notEntered}</div>
+                <div><i class="fa-solid fa-coins"></i> ${worker.price_range || agreed}</div>
             </div>
-            <p class="worker-desc">${worker.description || "Qisqacha ma'lumot kiritilmagan."}</p>
+            <p class="worker-desc">${worker.description || noInfo}</p>
             <div class="worker-actions">
-                <button class="btn btn-outline" onclick="showWorkerProfile(${worker.id})">Profilni ko'rish</button>
-                <a href="tel:${worker.phone}" class="btn btn-primary"><i class="fa-solid fa-phone"></i> Chaqirish</a>
+                <button class="btn btn-outline" onclick="showWorkerProfile(${worker.id})">${viewProfile}</button>
+                <a href="tel:${worker.phone}" class="btn btn-primary"><i class="fa-solid fa-phone"></i> ${callText}</a>
             </div>
         </div>`;
     return div;
@@ -393,7 +454,8 @@ function setupSearch() {
         if (suggestionsBox) suggestionsBox.classList.remove('active');
 
         const grid = document.getElementById('workersGrid');
-        grid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Qidirilmoqda...</p></div>';
+        const searchingText = typeof t === 'function' ? t('searching') : 'Qidirilmoqda...';
+        grid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><p>${searchingText}</p></div>`;
 
         try {
             const params = {};
@@ -430,7 +492,8 @@ function setupSearch() {
         const grid = document.getElementById('workersGrid');
         grid.innerHTML = '';
         if (!results.length) {
-            grid.innerHTML = "<p class='text-center w-100 mt-4' style='color:var(--text-muted);grid-column:1/-1;'>Siz qidirgan mezonlar bo'yicha usta topilmadi.</p>";
+            const noResultsText = typeof t === 'function' ? t('no_search_results') : "Siz qidirgan mezonlar bo'yicha usta topilmadi.";
+            grid.innerHTML = `<p class='text-center w-100 mt-4' style='color:var(--text-muted);grid-column:1/-1;'>${noResultsText}</p>`;
         } else {
             results.forEach((w, i) => {
                 const card = createWorkerCard(w);
@@ -507,11 +570,11 @@ function setupModals() {
                 }
                 
                 await api.registerWorker(formData);
-                showToast('Arizangiz muvaffaqiyatli yuborildi! Tez orada tekshirib tasdiqlanadi.', 'success');
+                showToast(typeof t === 'function' ? t('toast_register_success') : 'Arizangiz muvaffaqiyatli yuborildi!', 'success');
                 regForm.reset();
                 if(registerWorkerModal) registerWorkerModal.style.display = 'none';
             } catch (err) {
-                showToast(err.message || 'Xatolik yuz berdi. Iltimos keyinroq urinib koring.', 'error');
+                showToast(err.message || (typeof t === 'function' ? t('toast_error') : 'Xatolik yuz berdi.'), 'error');
             } finally {
                 btn.innerHTML = orig;
                 btn.disabled = false;
@@ -534,7 +597,7 @@ function setupModals() {
             if (username === 'Sarvar' && password === 'exa1122211') {
                 localStorage.setItem('access_token', 'mock_token_for_demo');
                 localStorage.setItem('admin_user', 'Sarvar');
-                showToast('Muvaffaqiyatli kirdingiz! (Demo rejim)', 'success');
+                showToast(typeof t === 'function' ? t('toast_login_success') : 'Muvaffaqiyatli kirdingiz!', 'success');
                 loginModal.style.display = 'none';
                 setTimeout(() => { window.location.href = 'admin.html'; }, 1000);
                 return;
@@ -542,11 +605,11 @@ function setupModals() {
 
             const result = await api.login(username, password);
             localStorage.setItem('access_token', result.access_token);
-            showToast('Muvaffaqiyatli kirdingiz!', 'success');
+            showToast(typeof t === 'function' ? t('toast_login_success') : 'Muvaffaqiyatli kirdingiz!', 'success');
             loginModal.style.display = 'none';
             setTimeout(() => { window.location.href = 'admin.html'; }, 1000);
         } catch (err) {
-            showToast("Login yoki parol noto'g'ri!", 'error');
+            showToast(typeof t === 'function' ? t('toast_login_error') : "Login yoki parol noto'g'ri!", 'error');
         } finally {
             btn.textContent = orig;
             btn.disabled = false;

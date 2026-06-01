@@ -348,38 +348,212 @@ h1, h2, h3, h4 {
 
 .nav-actions { display: flex; gap: 12px; align-items: center; }
 
-/* Theme Switcher */
-.theme-switcher {
-    display: flex;
-    align-items: center;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-full);
-    padding: 3px;
-    gap: 2px;
-    border: 1px solid var(--border);
-}
-.theme-btn {
-    width: 34px;
-    height: 34px;
+/* Theme Cycle Button (single button cycling light→dark→cyber) */
+.theme-cycle-btn {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: none;
-    background: transparent;
-    color: var(--text-muted);
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
+    color: var(--text);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: .85rem;
-    transition: all .3s var(--ease);
+    font-size: 1rem;
+    transition: all .35s var(--ease);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
 }
-.theme-btn.active {
-    background: var(--primary);
-    color: #fff;
+.theme-cycle-btn:hover {
+    background: var(--primary-glow);
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: rotate(30deg) scale(1.1);
     box-shadow: var(--shadow-glow);
 }
-.theme-btn:hover:not(.active) {
-    color: var(--primary);
+.theme-cycle-btn:active {
+    transform: rotate(0deg) scale(0.95);
+}
+.theme-cycle-btn i {
+    transition: all .3s var(--ease-spring);
+}
+.mobile-theme-btn {
+    width: auto;
+    border-radius: var(--radius-full);
+    padding: 10px 20px;
+    gap: 8px;
+    font-size: .9rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+/* ===== Language Switcher ===== */
+.lang-switcher {
+    position: relative;
+    z-index: 100;
+}
+.lang-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all .3s var(--ease);
+    font-family: 'Inter', sans-serif;
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+}
+.lang-current:hover {
+    border-color: var(--primary);
     background: var(--primary-glow);
+}
+.lang-current.open {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-glow);
+}
+.lang-flag {
+    width: 24px;
+    height: 16px;
+    border-radius: 3px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.15);
+    border: 1px solid rgba(0,0,0,.08);
+}
+.current-lang-name {
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.lang-arrow {
+    font-size: .65rem;
+    color: var(--text-muted);
+    transition: transform .3s var(--ease);
+}
+.lang-current.open .lang-arrow {
+    transform: rotate(180deg);
+}
+.lang-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    overflow: hidden;
+    display: none;
+    z-index: 200;
+}
+.lang-dropdown.open {
+    display: block;
+    animation: slideDown .25s var(--ease);
+}
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    width: 100%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: 'Inter', sans-serif;
+    font-size: .9rem;
+    color: var(--text);
+    text-align: left;
+}
+.lang-option:not(:last-child) {
+    border-bottom: 1px solid var(--border);
+}
+.lang-option:hover {
+    background: var(--primary-glow);
+}
+.lang-option.active {
+    background: var(--primary-glow);
+    color: var(--primary);
+    font-weight: 600;
+}
+.lang-option-flag {
+    display: flex;
+    align-items: center;
+}
+.lang-option-flag .lang-flag {
+    width: 28px;
+    height: 19px;
+    border-radius: 3px;
+}
+.lang-option-name {
+    flex: 1;
+}
+.lang-check {
+    color: var(--primary);
+    font-size: .75rem;
+}
+
+/* Mobile Language Switcher */
+.mobile-lang-switcher {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+.mobile-lang-title {
+    font-weight: 600;
+    font-size: .9rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.mobile-lang-title i {
+    color: var(--primary);
+}
+.mobile-lang-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.mobile-lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: .9rem;
+    color: var(--text);
+    transition: all .25s var(--ease);
+    text-align: left;
+}
+.mobile-lang-btn:hover {
+    background: var(--primary-glow);
+    border-color: var(--border);
+}
+.mobile-lang-btn.active {
+    background: var(--primary-glow);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 600;
+}
+.mobile-lang-btn .lang-option-flag .lang-flag {
+    width: 26px;
+    height: 18px;
 }
 
 .mobile-menu-btn {
@@ -560,7 +734,14 @@ h1, h2, h3, h4 {
 }
 .city-select:hover { color: var(--primary); }
 .city-select option { background: var(--surface); color: var(--text); }
-.search-btn { border-radius: var(--radius-full); padding: 14px 34px; font-size: 1rem; }
+.search-btn {
+    border-radius: var(--radius-full);
+    padding: 14px 34px;
+    font-size: 1rem;
+    gap: 8px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
 
 /* Search Suggestions */
 .search-suggestions {
@@ -1434,7 +1615,6 @@ h1, h2, h3, h4 {
     .stats-bar { gap: 18px; padding: 30px 20px; }
     .floating-card { padding: 12px 16px; font-size: .85rem; }
     .search-suggestions { font-size: .9rem; }
-    .theme-switcher { display: none; }
 }
 @media (max-width: 480px) {
     .container { padding: 0 16px; }
