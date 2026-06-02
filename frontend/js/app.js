@@ -2,17 +2,7 @@
 // Santexnik.uz — Frontend Application v2.0
 // ================================================================
 
-// Dummy data for demonstration (when API is unavailable)
-const DUMMY_WORKERS = [
-    { id:1, full_name:'Azamat Toshmatov', category:'santexnik', city:'Toshkent shahri', address:'Yunusobod tumani', experience_years:8, avg_rating:4.9, total_reviews:124, price_range:'Kelishilgan', description:"Professional santexnik. Barcha turdagi quvurlarni almashtirish va isitish tizimlarini o'rnatish.", is_verified:true, is_active:true, phone:'+998901234567', telegram_username:'azamat_santexnik' },
-    { id:2, full_name:'Bobur Aliyev', category:'elektrik', city:'Toshkent shahri', address:'Chilonzor tumani', experience_years:5, avg_rating:4.7, total_reviews:86, price_range:"50 000 so'mdan", description:"Rozetka, vikluchatel va noldan sim tortish xizmatlari. Sifatiga kafolat beraman.", is_verified:true, is_active:true, phone:'+998931112233', telegram_username:'bobur_elektrik' },
-    { id:3, full_name:'Sanjar Karimberdiyev', category:'umumiy_tamir', city:'Samarqand viloyati', address:'Samarqand shahri', experience_years:12, avg_rating:5.0, total_reviews:210, price_range:'Kelishilgan', description:"Yevro remont, kafellar terish, oboy yopishtirish va h.k. O'z brigadamiz bor.", is_verified:true, is_active:true, phone:'+998977778899' },
-    { id:4, full_name:'Dilshod Rahmatov', category:'konditsioner', city:'Toshkent shahri', address:"Mirzo Ulug'bek tumani", experience_years:4, avg_rating:4.5, total_reviews:45, price_range:"100 000 so'm/soat", description:"Konditsioner o'rnatish, tozalash va freon quyish. Tez va sifatli.", is_verified:false, is_active:true, phone:'+998994445566' },
-    { id:5, full_name:'Jasur Mamatov', category:'duradgor', city:'Toshkent shahri', address:'Uchtepa tumani', experience_years:15, avg_rating:4.8, total_reviews:67, price_range:"80 000 so'mdan", description:"Professional duradgor. Eshiklar, derazalar va yog'och konstruktsiyalar.", is_verified:true, is_active:true, phone:'+998905556677' },
-    { id:6, full_name:'Ulugbek Normatov', category:'suvaqchi', city:"Farg'ona viloyati", address:"Farg'ona shahri", experience_years:10, avg_rating:4.6, total_reviews:53, price_range:'Kelishilgan', description:"Suvoq ishlari, devorlarni tekislash va dekorativ suvoq.", is_verified:true, is_active:true, phone:'+998917778899' },
-    { id:7, full_name:'Mirzo Karimov', category:'plitakash', city:'Toshkent shahri', address:'Olmazor tumani', experience_years:6, avg_rating:4.4, total_reviews:38, price_range:"70 000 so'm/m²", description:"Kafel va plitka terish ustasi. Hammom, oshxona va pol.", is_verified:false, is_active:true, phone:'+998933334455' },
-    { id:8, full_name:'Farhod Eshmatov', category:'svarka', city:'Andijon viloyati', address:'Andijon shahri', experience_years:20, avg_rating:4.9, total_reviews:178, price_range:'Kelishilgan', description:"Svarka ishlari. Temir darvoza, panjara, metall konstruktsiyalar.", is_verified:true, is_active:true, phone:'+998909998877' }
-];
+// No dummy data - using real API only
 
 const CATEGORY_NAMES = {
     santexnik:'Santexnik', elektrik:'Elektrik', umumiy_tamir:"Ta'mirchi",
@@ -189,8 +179,9 @@ async function fetchWorkers() {
     try {
         appState.workers = await api.getWorkers();
     } catch (e) {
-        console.warn('Using dummy data', e);
-        appState.workers = DUMMY_WORKERS;
+        console.warn('Error fetching workers', e);
+        appState.workers = [];
+        showToast('Ustalarni yuklashda xatolik yuz berdi.', 'error');
     }
     renderWorkers();
 }
@@ -200,11 +191,12 @@ async function fetchStats() {
     try {
         stats = await api.getStats();
     } catch (e) {
+        console.warn('Error fetching stats', e);
         stats = {
-            total_workers: DUMMY_WORKERS.length,
-            total_reviews: 803,
-            avg_rating: 4.7,
-            categories: { santexnik:1, elektrik:1, umumiy_tamir:1, konditsioner:1, duradgor:1, suvaqchi:1, plitakash:1, svarka:1 }
+            total_workers: 0,
+            total_reviews: 0,
+            avg_rating: 0,
+            categories: {}
         };
     }
     animateCounter('statWorkers', stats.total_workers || 0);
