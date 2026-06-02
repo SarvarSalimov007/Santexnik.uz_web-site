@@ -153,7 +153,7 @@ function initLocations() {
     if(citySelect) {
         citySelect.addEventListener('change', () => {
             const region = citySelect.value;
-            districtSelect.innerHTML = '<option value="">Barcha tumanlar</option>';
+            districtSelect.innerHTML = `<option value="" data-i18n="search_all_districts">${typeof t === 'function' ? t('search_all_districts') : 'Barcha tumanlar'}</option>`;
             if (region && UZ_LOCATIONS[region]) {
                 UZ_LOCATIONS[region].forEach(district => {
                     const option = document.createElement('option');
@@ -168,7 +168,7 @@ function initLocations() {
     if(regCitySelect) {
         regCitySelect.addEventListener('change', () => {
             const region = regCitySelect.value;
-            regDistrictSelect.innerHTML = '<option value="">Tuman/Manzilni tanlang</option>';
+            regDistrictSelect.innerHTML = `<option value="" data-i18n="reg_select_district">${typeof t === 'function' ? t('reg_select_district') : 'Oldin viloyatni tanlang'}</option>`;
             if (region && UZ_LOCATIONS[region]) {
                 UZ_LOCATIONS[region].forEach(district => {
                     const option = document.createElement('option');
@@ -185,7 +185,7 @@ function initLocations() {
 async function fetchWorkers() {
     const grid = document.getElementById('workersGrid');
     const loadingText = typeof t === 'function' ? t('loading_workers') : 'Ustalar yuklanmoqda...';
-    grid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><p>${loadingText}</p></div>`;
+    grid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><p data-i18n="loading_workers">${loadingText}</p></div>`;
     try {
         appState.workers = await api.getWorkers();
     } catch (e) {
@@ -211,8 +211,8 @@ async function fetchStats() {
     animateCounter('statReviews', stats.total_reviews || 0);
     animateCounter('statRating', stats.avg_rating || 0, true);
     animateCounter('statCategories', Object.keys(stats.categories || {}).length || 8);
-    const heroCount = document.getElementById('workerCountHero');
-    if (heroCount) heroCount.textContent = `${stats.total_workers || '500+'}+ Ustalar`;
+    const heroCount = document.getElementById('workerCountNumber');
+    if (heroCount) heroCount.textContent = `${stats.total_workers || '500'}+`;
 }
 
 function animateCounter(id, target, isFloat = false) {
@@ -251,7 +251,7 @@ function renderWorkers() {
     else if (appState.currentSort === 'experience') filtered.sort((a, b) => b.experience_years - a.experience_years);
 
     if (!filtered.length) {
-        grid.innerHTML = `<p class="text-center w-100 mt-4" style="color:var(--text-muted);grid-column:1/-1;">${typeof t === 'function' ? t('no_workers_found') : 'Bu toifada ustalar topilmadi.'}</p>`;
+        grid.innerHTML = `<p class="text-center w-100 mt-4" style="color:var(--text-muted);grid-column:1/-1;" data-i18n="no_workers_found">${typeof t === 'function' ? t('no_workers_found') : 'Bu toifada ustalar topilmadi.'}</p>`;
         return;
     }
     filtered.forEach((w, i) => {
@@ -405,7 +405,7 @@ function setupSearch() {
                 if (s.type === 'category') {
                     return `<div class="suggestion-item" data-type="category" data-key="${s.key}">
                         <i class="fa-solid ${s.icon}"></i>
-                        <span><strong>${s.name}</strong> — kategoriya</span>
+                        <span><strong>${s.name}</strong> — ${typeof t === 'function' ? t('category_label') : 'kategoriya'}</span>
                     </div>`;
                 } else {
                     return `<div class="suggestion-item" data-type="worker" data-id="${s.id}">
@@ -455,7 +455,7 @@ function setupSearch() {
 
         const grid = document.getElementById('workersGrid');
         const searchingText = typeof t === 'function' ? t('searching') : 'Qidirilmoqda...';
-        grid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><p>${searchingText}</p></div>`;
+        grid.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><p data-i18n="searching">${searchingText}</p></div>`;
 
         try {
             const params = {};
@@ -493,7 +493,7 @@ function setupSearch() {
         grid.innerHTML = '';
         if (!results.length) {
             const noResultsText = typeof t === 'function' ? t('no_search_results') : "Siz qidirgan mezonlar bo'yicha usta topilmadi.";
-            grid.innerHTML = `<p class='text-center w-100 mt-4' style='color:var(--text-muted);grid-column:1/-1;'>${noResultsText}</p>`;
+            grid.innerHTML = `<p class='text-center w-100 mt-4' style='color:var(--text-muted);grid-column:1/-1;' data-i18n="no_search_results">${noResultsText}</p>`;
         } else {
             results.forEach((w, i) => {
                 const card = createWorkerCard(w);
@@ -517,9 +517,11 @@ function setupSearch() {
 // ===== Modals =====
 function setupModals() {
     const loginBtn = document.getElementById('loginBtn');
+    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
     const loginModal = document.getElementById('loginModal');
     const workerModal = document.getElementById('workerModal');
     const registerWorkerBtn = document.getElementById('registerWorkerBtn');
+    const mobileRegisterWorkerBtn = document.getElementById('mobileRegisterWorkerBtn');
     const registerWorkerModal = document.getElementById('registerWorkerModal');
     const closeBtns = document.querySelectorAll('.close-modal');
 
@@ -536,7 +538,17 @@ function setupModals() {
     }
 
     if(loginBtn) loginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
+    if(mobileLoginBtn) mobileLoginBtn.addEventListener('click', () => {
+        loginModal.style.display = 'flex';
+        document.getElementById('mobileMenu').classList.remove('active');
+        document.getElementById('mobileOverlay').classList.remove('active');
+    });
     if(registerWorkerBtn) registerWorkerBtn.addEventListener('click', () => registerWorkerModal.style.display = 'flex');
+    if(mobileRegisterWorkerBtn) mobileRegisterWorkerBtn.addEventListener('click', () => {
+        registerWorkerModal.style.display = 'flex';
+        document.getElementById('mobileMenu').classList.remove('active');
+        document.getElementById('mobileOverlay').classList.remove('active');
+    });
     
     closeBtns.forEach(btn => btn.addEventListener('click', function () { this.closest('.modal').style.display = 'none'; }));
     window.addEventListener('click', e => {

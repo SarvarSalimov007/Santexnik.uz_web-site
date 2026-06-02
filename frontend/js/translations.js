@@ -55,6 +55,13 @@ const TRANSLATIONS = {
         ru: "Админ Панель",
         tj: "Админ Панел"
     },
+    nav_language: {
+        uz: "Til",
+        uz_cyrl: "Тил",
+        en: "Language",
+        ru: "Язык",
+        tj: "Забон"
+    },
 
     // ===== Hero Section =====
     hero_title_1: {
@@ -1191,6 +1198,11 @@ function applyTranslations() {
 
     // Update CATEGORY_NAMES for dynamic content
     updateCategoryNames();
+    
+    // Update theme toggle tooltips to match new language
+    if (typeof applyTheme === 'function') {
+        applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
+    }
 }
 
 function updateCategoryNames() {
@@ -1268,7 +1280,7 @@ function initLanguageSwitcher() {
         const mobileLangDiv = document.createElement('div');
         mobileLangDiv.className = 'mobile-lang-switcher';
         mobileLangDiv.innerHTML = `
-            <div class="mobile-lang-title"><i class="fa-solid fa-globe"></i> ${t('nav_home') === 'Home' ? 'Language' : 'Til'}</div>
+            <div class="mobile-lang-title" data-i18n="nav_language"><i class="fa-solid fa-globe"></i> ${t('nav_language')}</div>
             <div class="mobile-lang-options">
                 ${Object.entries(LANGUAGES).map(([code, lang]) => `
                     <button class="mobile-lang-btn lang-option ${code === getCurrentLanguage() ? 'active' : ''}" data-lang="${code}">

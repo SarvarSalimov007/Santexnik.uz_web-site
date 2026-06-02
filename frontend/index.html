@@ -50,7 +50,11 @@
         <a href="#about" data-i18n="nav_how_works">Qanday ishlaydi</a>
         <a href="#contact" data-i18n="nav_contact">Bog'lanish</a>
         <a href="https://t.me/SantexnikUz_bot" target="_blank"><i class="fa-brands fa-telegram"></i> <span data-i18n="telegram_bot">Telegram Bot</span></a>
-        <div style="display: flex; gap: 8px; padding-top: 20px;">
+        
+        <button id="mobileRegisterWorkerBtn" class="btn btn-primary btn-sm" style="background:var(--success); border-color:var(--success); margin: 10px 20px; width: calc(100% - 40px);" data-i18n="nav_register_worker">Usta bo'lib qo'shilish</button>
+        <button id="mobileLoginBtn" class="btn btn-outline btn-sm" style="margin: 0 20px; width: calc(100% - 40px);" data-i18n="nav_login">Admin Panel</button>
+
+        <div style="display: flex; gap: 8px; padding-top: 20px; padding-left: 20px; padding-right: 20px;">
             <button class="theme-cycle-btn mobile-theme-btn" id="mobileThemeCycleBtn" title="Rejimni o'zgartirish">
                 <i class="fa-solid fa-sun"></i> <span data-i18n="theme_light">Yorug' rejim</span>
             </button>
@@ -88,7 +92,7 @@
                 </div>
                 <div class="floating-card card-2">
                     <div class="icon"><i class="fa-solid fa-check-circle"></i></div>
-                    <p id="workerCountHero" data-i18n="workers_count">500+ Ustalar</p>
+                    <p id="workerCountHero"><span id="workerCountNumber">500+</span> <span data-i18n="nav_workers">Ustalar</span></p>
                 </div>
                 <div class="hero-blob"></div>
             </div>
