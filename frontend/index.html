@@ -6,6 +6,15 @@
     <title>Santexnik.uz — O'zbekistondagi eng ishonchli ustalar platformasi</title>
     <meta name="description" content="O'zbekistondagi eng yaxshi santexnik, elektrik va boshqa turdagi ustalarni toping. Reytingli, tasdiqlangan va ishonchli xizmatlar. Tez, qulay, bepul!">
     <meta name="keywords" content="santexnik, elektrik, usta, ta'mirlash, o'zbekiston, toshkent, ustalar, remont, konditsioner, plitka">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Santexnik">
+    <link rel="apple-touch-icon" href="icon.svg">
+    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -422,6 +431,20 @@
     <script src="js/translations.js"></script>
     <script src="js/api.js"></script>
     <script src="js/app.js"></script>
-
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
