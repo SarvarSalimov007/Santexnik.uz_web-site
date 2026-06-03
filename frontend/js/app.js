@@ -883,11 +883,9 @@ function handleInstallClick() {
                 console.log('User dismissed the install prompt');
             }
             deferredPrompt = null;
-            const installBtn = document.getElementById('installAppBtn');
-            const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
-            if(installBtn) installBtn.style.display = 'none';
-            if(mobileInstallBtn) mobileInstallBtn.style.display = 'none';
         });
+    } else {
+        showToast("Ilovani o'rnatish uchun saytga brauzerdan (Chrome/Safari) ruxsat berilishi yoki to'g'ri serverda ishlashi kerak.", "info");
     }
 }
 
