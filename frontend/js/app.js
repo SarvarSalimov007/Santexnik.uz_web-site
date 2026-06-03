@@ -860,3 +860,48 @@ function initNavbarScroll() {
         });
     });
 }
+
+// ===== PWA Install Logic =====
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installBtn = document.getElementById('installAppBtn');
+    const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
+    if(installBtn) installBtn.style.display = 'inline-flex';
+    if(mobileInstallBtn) mobileInstallBtn.style.display = 'block';
+});
+
+function handleInstallClick() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+            const installBtn = document.getElementById('installAppBtn');
+            const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
+            if(installBtn) installBtn.style.display = 'none';
+            if(mobileInstallBtn) mobileInstallBtn.style.display = 'none';
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const installBtn = document.getElementById('installAppBtn');
+    const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
+    if(installBtn) installBtn.addEventListener('click', handleInstallClick);
+    if(mobileInstallBtn) mobileInstallBtn.addEventListener('click', handleInstallClick);
+});
+
+window.addEventListener('appinstalled', (evt) => {
+    console.log('INSTALL: Success');
+    const installBtn = document.getElementById('installAppBtn');
+    const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
+    if(installBtn) installBtn.style.display = 'none';
+    if(mobileInstallBtn) mobileInstallBtn.style.display = 'none';
+});
