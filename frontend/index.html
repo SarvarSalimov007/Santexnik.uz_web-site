@@ -37,7 +37,7 @@
                 <button class="theme-cycle-btn" id="themeCycleBtn" title="Rejimni o'zgartirish">
                     <i class="fa-solid fa-sun"></i>
                 </button>
-                <button id="installAppBtn" class="btn btn-primary btn-sm" style="background: var(--accent); border-color: var(--accent);" data-i18n="nav_install_app"><i class="fa-solid fa-download"></i> O'rnatish</button>
+                <button id="installAppBtn" class="btn btn-primary btn-sm btn-pulse" style="background: var(--accent); border-color: var(--accent);" data-i18n="nav_install_app"><i class="fa-solid fa-download"></i> O'rnatish</button>
                 <button id="registerWorkerBtn" class="btn btn-primary btn-sm" style="background:var(--success); border-color:var(--success);" data-i18n="nav_register_worker">Usta bo'lib qo'shilish</button>
                 <button id="loginBtn" class="btn btn-outline btn-sm" data-i18n="nav_login">Admin Panel</button>
                 <a href="https://t.me/SantexnikUz_bot" target="_blank" class="btn btn-primary btn-sm">
@@ -61,7 +61,7 @@
         <a href="#contact" data-i18n="nav_contact">Bog'lanish</a>
         <a href="https://t.me/SantexnikUz_bot" target="_blank"><i class="fa-brands fa-telegram"></i> <span data-i18n="telegram_bot">Telegram Bot</span></a>
         
-        <button id="mobileInstallAppBtn" class="btn btn-primary btn-sm" style="background: var(--accent); border-color: var(--accent); margin: 10px 20px; width: calc(100% - 40px);" data-i18n="nav_install_app"><i class="fa-solid fa-download"></i> Ilovani o'rnatish</button>
+        <button id="mobileInstallAppBtn" class="btn btn-primary btn-sm btn-pulse" style="background: var(--accent); border-color: var(--accent); margin: 10px 20px; width: calc(100% - 40px);" data-i18n="nav_install_app"><i class="fa-solid fa-download"></i> Ilovani o'rnatish</button>
         <button id="mobileRegisterWorkerBtn" class="btn btn-primary btn-sm" style="background:var(--success); border-color:var(--success); margin: 10px 20px; width: calc(100% - 40px);" data-i18n="nav_register_worker">Usta bo'lib qo'shilish</button>
         <button id="mobileLoginBtn" class="btn btn-outline btn-sm" style="margin: 0 20px; width: calc(100% - 40px);" data-i18n="nav_login">Admin Panel</button>
 
@@ -423,6 +423,33 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100" style="padding:14px;" data-i18n="login_submit">Kirish</button>
             </form>
+        </div>
+    </div>
+
+    <!-- PWA Install Modal -->
+    <div id="installModal" class="modal">
+        <div class="modal-content" style="max-width: 450px; text-align: center;">
+            <span class="close-modal">&times;</span>
+            <div style="font-size: 3.5rem; color: var(--accent); margin-bottom: 16px; filter: drop-shadow(0 4px 12px rgba(245,158,11,0.3));">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <h2 style="margin-bottom: 12px; font-family: 'Outfit', sans-serif;" data-i18n="install_modal_title">Ilovani o'rnatish</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 1.05rem;" data-i18n="install_modal_desc">Santexnik.uz ilovasini qurilmangizga o'rnatib oling va undan yanada qulayroq foydalaning!</p>
+            
+            <div id="installInstructions" style="display: none; text-align: left; background: var(--bg-secondary); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 24px;">
+                <h4 style="margin-bottom: 12px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-brands fa-apple" style="font-size: 1.2rem;"></i> iOS (Safari) uchun:</h4>
+                <ol style="padding-left: 20px; color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6;">
+                    <li>Pastki menyudan <strong>Ulashish <i class="fa-solid fa-arrow-up-from-bracket" style="font-size:0.85rem"></i></strong> tugmasini bosing.</li>
+                    <li>Ro'yxatdan <strong>Ekranga qo'shish (Add to Home Screen) <i class="fa-regular fa-square-plus" style="font-size:0.85rem"></i></strong> ni tanlang.</li>
+                </ol>
+                <h4 style="margin-bottom: 12px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-brands fa-android" style="font-size: 1.2rem; color: #3DDC84;"></i> Android uchun:</h4>
+                <ol style="padding-left: 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                    <li>Brauzer menyusidan <strong>(⋮)</strong> bosing.</li>
+                    <li><strong>Ekranga qo'shish (Add to Home screen)</strong> ni tanlang.</li>
+                </ol>
+            </div>
+
+            <button id="confirmInstallBtn" class="btn btn-primary w-100 btn-pulse" style="padding: 14px; font-size: 1.1rem; background: var(--accent); border-color: var(--accent);" data-i18n="install_btn_confirm"><i class="fa-solid fa-download"></i> Hozir o'rnatish</button>
         </div>
     </div>
 

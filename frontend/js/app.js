@@ -515,6 +515,7 @@ function setupModals() {
     const registerWorkerBtn = document.getElementById('registerWorkerBtn');
     const mobileRegisterWorkerBtn = document.getElementById('mobileRegisterWorkerBtn');
     const registerWorkerModal = document.getElementById('registerWorkerModal');
+    const installModal = document.getElementById('installModal');
     const closeBtns = document.querySelectorAll('.close-modal');
 
     // Password Toggle
@@ -547,12 +548,14 @@ function setupModals() {
         if (e.target === loginModal) loginModal.style.display = 'none';
         if (e.target === workerModal) workerModal.style.display = 'none';
         if (e.target === registerWorkerModal) registerWorkerModal.style.display = 'none';
+        if (installModal && e.target === installModal) installModal.style.display = 'none';
     });
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
             if(loginModal) loginModal.style.display = 'none';
             if(workerModal) workerModal.style.display = 'none';
             if(registerWorkerModal) registerWorkerModal.style.display = 'none';
+            if(installModal) installModal.style.display = 'none';
         }
     });
 
@@ -863,37 +866,52 @@ function initNavbarScroll() {
 
 // ===== PWA Install Logic =====
 let deferredPrompt;
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    const installBtn = document.getElementById('installAppBtn');
-    const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
-    if(installBtn) installBtn.style.display = 'inline-flex';
-    if(mobileInstallBtn) mobileInstallBtn.style.display = 'block';
 });
 
 function handleInstallClick() {
+    const installModal = document.getElementById('installModal');
+    const confirmInstallBtn = document.getElementById('confirmInstallBtn');
+    const installInstructions = document.getElementById('installInstructions');
+    
+    if (installModal) installModal.style.display = 'flex';
+    
     if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-            } else {
-                console.log('User dismissed the install prompt');
-            }
-            deferredPrompt = null;
-        });
+        if (installInstructions) installInstructions.style.display = 'none';
+        if (confirmInstallBtn) {
+            confirmInstallBtn.style.display = 'inline-flex';
+            confirmInstallBtn.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    if (installModal) installModal.style.display = 'none';
+                });
+            };
+        }
     } else {
-        showToast("Ilovani o'rnatish uchun saytga brauzerdan (Chrome/Safari) ruxsat berilishi yoki to'g'ri serverda ishlashi kerak.", "info");
+        if (installInstructions) installInstructions.style.display = 'block';
+        if (confirmInstallBtn) confirmInstallBtn.style.display = 'none';
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const installBtn = document.getElementById('installAppBtn');
     const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
-    if(installBtn) installBtn.addEventListener('click', handleInstallClick);
-    if(mobileInstallBtn) mobileInstallBtn.addEventListener('click', handleInstallClick);
+    
+    if (isStandalone) {
+        if(installBtn) installBtn.style.display = 'none';
+        if(mobileInstallBtn) mobileInstallBtn.style.display = 'none';
+    } else {
+        if(installBtn) installBtn.addEventListener('click', handleInstallClick);
+        if(mobileInstallBtn) mobileInstallBtn.addEventListener('click', handleInstallClick);
+    }
 });
 
 window.addEventListener('appinstalled', (evt) => {
