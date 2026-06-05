@@ -1,6 +1,6 @@
 {
-  "name": "Santexnik.uz",
-  "short_name": "Santexnik",
+  "name": "My santexnik",
+  "short_name": "My santexnik",
   "description": "O'zbekistondagi eng ishonchli ustalar platformasi",
   "start_url": "/index.html",
   "display": "standalone",

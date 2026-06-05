@@ -469,11 +469,11 @@ const TRANSLATIONS = {
         tj: "Дархост монед, мо барои шумо устои беҳтаринро пайдо мекунем"
     },
     banner_title: {
-        uz: "Santexnik.uz dasturini o'rnating!",
-        uz_cyrl: "Santexnik.uz дастурини ўрнатинг!",
-        en: "Install Santexnik.uz app!",
-        ru: "Установите приложение Santexnik.uz!",
-        tj: "Барномаи Santexnik.uz-ро насб кунед!"
+        uz: "My santexnik dasturini o'rnating!",
+        uz_cyrl: "My santexnik дастурини ўрнатинг!",
+        en: "Install My santexnik app!",
+        ru: "Установите приложение My santexnik!",
+        tj: "Барномаи My santexnik-ро насб кунед!"
     },
     banner_desc: {
         uz: "Saytni telefoningiz yoki kompyuteringizga dastur (PWA) sifatida o'rnatib oling. Bu sizga internet sekin bo'lganda ham ustalarni tezroq topish imkonini beradi va xotiradan joy olmaydi.",
@@ -562,11 +562,11 @@ const TRANSLATIONS = {
         tj: "Тамос"
     },
     footer_copyright: {
-        uz: "© 2026 Santexnik.uz. Barcha huquqlar himoyalangan.",
-        uz_cyrl: "© 2026 Santexnik.uz. Барча ҳуқуқлар ҳимояланган.",
-        en: "© 2026 Santexnik.uz. All rights reserved.",
-        ru: "© 2026 Santexnik.uz. Все права защищены.",
-        tj: "© 2026 Santexnik.uz. Ҳамаи ҳуқуқҳо ҳифз шудаанд."
+        uz: "© 2026 My santexnik. Barcha huquqlar himoyalangan.",
+        uz_cyrl: "© 2026 My santexnik. Барча ҳуқуқлар ҳимояланган.",
+        en: "© 2026 My santexnik. All rights reserved.",
+        ru: "© 2026 My santexnik. Все права защищены.",
+        tj: "© 2026 My santexnik. Ҳамаи ҳуқуқҳо ҳифз шудаанд."
     },
 
     // ===== Worker Cards =====
@@ -1202,11 +1202,11 @@ function applyTranslations() {
     // Update page title
     const lang = getCurrentLanguage();
     const titles = {
-        uz: "Santexnik.uz — O'zbekistondagi eng ishonchli ustalar platformasi",
-        uz_cyrl: "Santexnik.uz — Ўзбекистондаги энг ишончли усталар платформаси",
-        en: "Santexnik.uz — The most trusted workers platform in Uzbekistan",
-        ru: "Santexnik.uz — Самая надёжная платформа мастеров в Узбекистане",
-        tj: "Santexnik.uz — Платформаи боэътимодтарини устоҳо дар Ӯзбекистон"
+        uz: "My santexnik — O'zbekistondagi eng ishonchli ustalar platformasi",
+        uz_cyrl: "My santexnik — Ўзбекистондаги энг ишончли усталар платформаси",
+        en: "My santexnik — The most trusted workers platform in Uzbekistan",
+        ru: "My santexnik — Самая надёжная платформа мастеров в Узбекистане",
+        tj: "My santexnik — Платформаи боэътимодтарини устоҳо дар Ӯзбекистон"
     };
     document.title = titles[lang] || titles.uz;
 
