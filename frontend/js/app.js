@@ -904,13 +904,18 @@ function handleInstallClick() {
 document.addEventListener('DOMContentLoaded', () => {
     const installBtn = document.getElementById('installAppBtn');
     const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
+    const bannerInstallBtn = document.getElementById('bannerInstallBtn');
     
     if (isStandalone) {
         if(installBtn) installBtn.style.display = 'none';
         if(mobileInstallBtn) mobileInstallBtn.style.display = 'none';
+        if(bannerInstallBtn) bannerInstallBtn.style.display = 'none';
+        const bannerSection = document.querySelector('.app-download-banner');
+        if(bannerSection) bannerSection.style.display = 'none';
     } else {
         if(installBtn) installBtn.addEventListener('click', handleInstallClick);
         if(mobileInstallBtn) mobileInstallBtn.addEventListener('click', handleInstallClick);
+        if(bannerInstallBtn) bannerInstallBtn.addEventListener('click', handleInstallClick);
     }
 });
 
@@ -918,6 +923,10 @@ window.addEventListener('appinstalled', (evt) => {
     console.log('INSTALL: Success');
     const installBtn = document.getElementById('installAppBtn');
     const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
+    const bannerInstallBtn = document.getElementById('bannerInstallBtn');
     if(installBtn) installBtn.style.display = 'none';
     if(mobileInstallBtn) mobileInstallBtn.style.display = 'none';
+    if(bannerInstallBtn) bannerInstallBtn.style.display = 'none';
+    const bannerSection = document.querySelector('.app-download-banner');
+    if(bannerSection) bannerSection.style.display = 'none';
 });

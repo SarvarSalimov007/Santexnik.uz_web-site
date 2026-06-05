@@ -468,6 +468,20 @@ const TRANSLATIONS = {
         ru: "Оставьте заявку, мы найдём лучшего мастера для вас",
         tj: "Дархост монед, мо барои шумо устои беҳтаринро пайдо мекунем"
     },
+    banner_title: {
+        uz: "Santexnik.uz dasturini o'rnating!",
+        uz_cyrl: "Santexnik.uz дастурини ўрнатинг!",
+        en: "Install Santexnik.uz app!",
+        ru: "Установите приложение Santexnik.uz!",
+        tj: "Барномаи Santexnik.uz-ро насб кунед!"
+    },
+    banner_desc: {
+        uz: "Saytni telefoningiz yoki kompyuteringizga dastur (PWA) sifatida o'rnatib oling. Bu sizga internet sekin bo'lganda ham ustalarni tezroq topish imkonini beradi va xotiradan joy olmaydi.",
+        uz_cyrl: "Сайтни телефонингиз ёки компьютерингизга дастур (PWA) сифатида ўрнатиб олинг. Бу сизга интернет секин бўлганда ҳам усталарни тезроқ топиш имконини беради ва хотирадан жой олмайди.",
+        en: "Install the site as an app (PWA) on your phone or computer. It allows you to find workers faster even with a slow internet connection and doesn't take up storage space.",
+        ru: "Установите сайт как приложение (PWA) на свой телефон или компьютер. Это позволит вам быстрее находить мастеров даже при медленном интернете и не занимает места в памяти.",
+        tj: "Сайтро ҳамчун барнома (PWA) дар телефон ё компютери худ насб кунед. Ин ба шумо имкон медиҳад, ки ҳатто ҳангоми суст будани интернет устоҳоро тезтар пайдо кунед ва дар хотира ҷой намегирад."
+    },
     form_name: {
         uz: "Ismingiz",
         uz_cyrl: "Исмингиз",
