@@ -243,7 +243,15 @@ function renderWorkers() {
     else if (appState.currentSort === 'experience') filtered.sort((a, b) => b.experience_years - a.experience_years);
 
     if (!filtered.length) {
-        grid.innerHTML = `<p class="text-center w-100 mt-4" style="color:var(--text-muted);grid-column:1/-1;" data-i18n="no_workers_found">${typeof t === 'function' ? t('no_workers_found') : 'Bu toifada ustalar topilmadi.'}</p>`;
+        const noWorkersText = typeof t === 'function' ? t('no_workers_found') : 'Bu toifada ustalar topilmadi.';
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                <div style="font-size: 4rem; color: var(--border); margin-bottom: 20px;">
+                    <i class="fa-solid fa-user-slash"></i>
+                </div>
+                <h3 style="color: var(--text-muted); font-size: 1.2rem; margin-bottom: 10px;">${noWorkersText}</h3>
+                <p style="color: var(--text-muted); font-size: .9rem;">Iltimos, boshqa kategoriya yoki hududni tanlang</p>
+            </div>`;
         return;
     }
     filtered.forEach((w, i) => {
@@ -533,14 +541,16 @@ function setupModals() {
     if(loginBtn) loginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
     if(mobileLoginBtn) mobileLoginBtn.addEventListener('click', () => {
         loginModal.style.display = 'flex';
-        document.getElementById('mobileMenu').classList.remove('active');
-        document.getElementById('mobileOverlay').classList.remove('active');
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('mobileOverlay').classList.remove('open');
+        document.body.style.overflow = '';
     });
     if(registerWorkerBtn) registerWorkerBtn.addEventListener('click', () => registerWorkerModal.style.display = 'flex');
     if(mobileRegisterWorkerBtn) mobileRegisterWorkerBtn.addEventListener('click', () => {
         registerWorkerModal.style.display = 'flex';
-        document.getElementById('mobileMenu').classList.remove('active');
-        document.getElementById('mobileOverlay').classList.remove('active');
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('mobileOverlay').classList.remove('open');
+        document.body.style.overflow = '';
     });
     
     closeBtns.forEach(btn => btn.addEventListener('click', function () { this.closest('.modal').style.display = 'none'; }));

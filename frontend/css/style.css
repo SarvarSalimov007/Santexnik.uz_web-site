@@ -583,11 +583,13 @@ h1, h2, h3, h4 {
     height: 100vh;
     background: var(--surface);
     z-index: 2000;
-    padding: 90px 30px 30px;
+    padding: 90px 24px 30px;
     transition: right .45s var(--ease);
     box-shadow: -8px 0 40px rgba(0,0,0,.15);
     backdrop-filter: blur(20px);
     border-left: 1px solid var(--border);
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 .mobile-menu.open { right: 0; }
 .mobile-menu a {
@@ -600,6 +602,7 @@ h1, h2, h3, h4 {
     transition: all .3s;
 }
 .mobile-menu a:hover { color: var(--primary); padding-left: 8px; }
+
 .mobile-menu-close {
     position: absolute;
     top: 24px;
@@ -1651,16 +1654,20 @@ h1, h2, h3, h4 {
         border-radius: var(--radius-xl);
         gap: 0;
         padding: 12px;
+        width: 100%;
+        box-sizing: border-box;
     }
     .search-input-group {
         padding: 16px;
         border-bottom: 1px solid var(--border);
+        width: 100%;
     }
     .city-select {
         border-left: none;
         padding: 16px;
         border-bottom: 1px solid var(--border);
         width: 100%;
+        max-width: 100%;
     }
     .search-btn { border-radius: var(--radius-md); margin: 10px 0 0; width: 100%; }
     .hero-image { display: none; }
@@ -1693,10 +1700,99 @@ h1, h2, h3, h4 {
     .banner-content { max-width: 100%; }
     .banner-features { justify-content: center; }
     .banner-visual { display: none; }
+
+    /* Modal mobile fix */
+    .modal-content {
+        width: 95%;
+        padding: 24px 20px;
+        max-height: 90vh;
+        margin: 5vh auto;
+        border-radius: var(--radius-xl);
+    }
+    .modal-content > div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Worker card mobile fix */
+    .worker-header { flex-direction: column; text-align: center; align-items: center; }
+    .worker-info { text-align: center; }
+    .worker-rating { justify-content: center; }
+    .worker-actions .btn { font-size: .8rem; padding: 8px 10px; }
+
+    /* Mobile menu buttons fix */
+    #mobileInstallAppBtn, #mobileRegisterWorkerBtn, #mobileLoginBtn {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+    .mobile-menu {
+        width: 100%;
+        max-width: 320px;
+        overflow-y: auto;
+    }
+
+    /* Filter buttons wrapping */
+    .filters > div:first-child {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .filter-btn { padding: 8px 16px; font-size: .82rem; }
 }
 @media (max-width: 480px) {
     .container { padding: 0 16px; }
     .category-grid { grid-template-columns: 1fr; }
     .stats-bar { flex-direction: column; gap: 16px; }
     .hero-content h1 { font-size: 1.8rem; }
+    
+    /* Search box fix on very small screens */
+    .search-box {
+        border-radius: var(--radius-lg);
+        padding: 8px;
+    }
+    .search-input-group {
+        padding: 12px;
+        font-size: .9rem;
+    }
+    .search-input-group input { font-size: .9rem; }
+    .city-select { padding: 12px; font-size: .9rem; }
+    .search-btn { padding: 12px 20px; font-size: .9rem; }
+    
+    /* Modal extra small fix */
+    .modal-content {
+        width: 98%;
+        padding: 20px 14px;
+        border-radius: var(--radius-lg);
+    }
+    
+    /* Steps on tiny screens */
+    .step { padding: 0 10px; }
+    
+    /* Footer */
+    .footer { padding: 50px 0 20px; }
+    .footer-container { gap: 30px; }
+    
+    /* Navbar logo text */
+    .logo { font-size: 1.3rem; }
+    
+    /* Toast position fix */
+    .toast {
+        left: 16px;
+        right: 16px;
+        bottom: 20px;
+        font-size: .88rem;
+        padding: 12px 18px;
+    }
+
+    /* Register form 2-col grid to single */
+    form > div[style*="grid-template-columns: 1fr 1fr"] {
+        display: block !important;
+    }
+    form > div[style*="grid-template-columns: 1fr 1fr"] > .form-group {
+        margin-bottom: 16px;
+    }
+    
+    /* Scroll top button position */
+    .scroll-top { bottom: 20px; right: 16px; width: 44px; height: 44px; }
 }
+

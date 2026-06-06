@@ -36,15 +36,12 @@ class ApiService {
 
     _mockData(url, options) {
         if (url.includes('/stats')) {
-            return Promise.resolve({ total_workers: 120, total_reviews: 450, avg_rating: 4.8, categories: {} });
+            return Promise.resolve({ total_workers: 0, total_reviews: 0, avg_rating: 0, categories: {} });
         }
         if (url.includes('/workers') && (!options.method || options.method === 'GET')) {
             if (url.match(/\/workers\/\d+\/reviews/)) return Promise.resolve([]);
-            return Promise.resolve([
-                { id: 1, full_name: 'Sarvar Usta', category: 'santexnik', avg_rating: 4.9, experience_years: 5, city: 'Toshkent', price_range: 'Kelishilgan', total_reviews: 24, is_verified: true },
-                { id: 2, full_name: 'Ali Elektrik', category: 'elektrik', avg_rating: 4.7, experience_years: 3, city: 'Samarqand', price_range: 'Kelishilgan', total_reviews: 15, is_verified: false },
-                { id: 3, full_name: 'Aziz Ta\'mirchi', category: 'umumiy_tamir', avg_rating: 5.0, experience_years: 8, city: 'Buxoro', price_range: 'Kelishilgan', total_reviews: 50, is_verified: true }
-            ]);
+            // No fake workers - show real data only
+            return Promise.resolve([]);
         }
         if (url.includes('/token')) return Promise.resolve({ access_token: 'mock_token' });
         return Promise.resolve({ success: true });
