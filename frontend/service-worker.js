@@ -1,4 +1,4 @@
-const CACHE_NAME = 'santexnik-v1';
+const CACHE_NAME = 'santexnik-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -6,7 +6,6 @@ const ASSETS_TO_CACHE = [
   '/css/style.css',
   '/js/app.js',
   '/js/api.js',
-  '/js/locations.js',
   '/js/translations.js',
   '/js/admin.js',
   '/icon.svg',
