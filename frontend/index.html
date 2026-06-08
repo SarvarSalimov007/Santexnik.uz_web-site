@@ -17,6 +17,8 @@
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navbar -->
@@ -113,7 +115,7 @@
     </header>
 
     <!-- Stats Bar -->
-    <section class="stats-bar fade-up">
+    <section class="stats-bar" data-aos="fade-up">
         <div class="stat-item">
             <div class="stat-num" id="statWorkers">0</div>
             <div class="stat-label" data-i18n="stat_active_workers">Faol ustalar</div>
@@ -135,11 +137,11 @@
     <!-- Categories Section -->
     <section id="categories" class="categories section">
         <div class="container">
-            <div class="section-header fade-up">
+            <div class="section-header" data-aos="fade-up">
                 <h2 data-i18n="categories_title">Xizmat turlari</h2>
                 <p data-i18n="categories_desc">O'zingizga kerakli mutaxassislikni tanlang</p>
             </div>
-            <div class="category-grid stagger-children fade-up" id="categoryGrid">
+            <div class="category-grid stagger-children" data-aos="fade-up" data-aos-delay="100" id="categoryGrid">
                 <div class="category-card" data-category="santexnik">
                     <div class="icon-wrapper"><i class="fa-solid fa-faucet-drip"></i></div>
                     <h3 data-i18n="cat_santexnik">Santexnika</h3>
@@ -187,11 +189,11 @@
     <!-- Top Workers Section -->
     <section id="workers" class="workers section bg-light">
         <div class="container">
-            <div class="section-header fade-up">
+            <div class="section-header" data-aos="fade-up">
                 <h2 data-i18n="top_workers_title">Top Ustalar</h2>
                 <p data-i18n="top_workers_desc">Mijozlar tomonidan eng yuqori baholangan mutaxassislar</p>
             </div>
-            <div class="filters fade-up">
+            <div class="filters" data-aos="fade-up">
                 <div>
                     <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Barchasi</button>
                     <button class="filter-btn" data-filter="santexnik" data-i18n="filter_santexnik">Santexniklar</button>
@@ -221,11 +223,11 @@
     <!-- How it works -->
     <section id="about" class="how-it-works section">
         <div class="container">
-            <div class="section-header fade-up">
+            <div class="section-header" data-aos="fade-up">
                 <h2 data-i18n="how_title">Qanday ishlaydi?</h2>
                 <p data-i18n="how_desc">Usta chaqirish juda oson va qulay</p>
             </div>
-            <div class="steps-container fade-up">
+            <div class="steps-container" data-aos="fade-up" data-aos-delay="200">
                 <div class="step">
                     <div class="step-number">1</div>
                     <h3 data-i18n="step1_title">Usta qidiring</h3>
@@ -252,7 +254,7 @@
 
     <!-- App Download Banner -->
     <section class="app-download-banner section">
-        <div class="container banner-container fade-up">
+        <div class="container banner-container" data-aos="zoom-in">
             <div class="banner-content">
                 <h2 data-i18n="banner_title">My santexnik dasturini o'rnating!</h2>
                 <p data-i18n="banner_desc">Saytni telefoningiz yoki kompyuteringizga dastur (PWA) sifatida o'rnatib oling. Bu sizga internet sekin bo'lganda ham ustalarni tezroq topish imkonini beradi va xotiradan joy olmaydi.</p>
@@ -273,11 +275,11 @@
     <!-- Contact Section -->
     <section id="contact" class="contact-section section">
         <div class="container">
-            <div class="section-header fade-up">
+            <div class="section-header" data-aos="fade-up">
                 <h2 data-i18n="contact_title">Usta chaqirish</h2>
                 <p data-i18n="contact_desc">So'rov qoldiring, biz sizga eng mos ustani topamiz</p>
             </div>
-            <form class="contact-form fade-up" id="contactForm">
+            <form class="contact-form" data-aos="fade-up" data-aos-delay="200" id="contactForm">
                 <div class="form-group">
                     <label for="contactName" data-i18n="form_name">Ismingiz</label>
                     <input type="text" id="contactName" data-i18n-placeholder="form_name_placeholder" placeholder="Ismingizni kiriting" required>
@@ -478,13 +480,32 @@
     <!-- Scroll to top -->
     <button class="scroll-top" id="scrollTopBtn"><i class="fa-solid fa-arrow-up"></i></button>
 
+    <!-- Floating Contact Widget -->
+    <a href="https://t.me/SantexnikUz_bot" target="_blank" class="floating-contact-btn btn-pulse" title="Telegram orqali bog'lanish" data-aos="zoom-in" data-aos-anchor-placement="bottom-bottom">
+        <i class="fa-brands fa-telegram" style="font-size: 24px;"></i>
+    </a>
+
     <script src="js/locations.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/api.js"></script>
     <script src="js/app.js"></script>
     
-    <!-- PWA Service Worker Registration -->
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    
+    <!-- PWA Service Worker Registration & Initialization -->
     <script>
+        // Init External Libs
+        if(typeof AOS !== 'undefined') {
+            AOS.init({ once: true, duration: 800, offset: 50 });
+        }
+        if(typeof VanillaTilt !== 'undefined') {
+            VanillaTilt.init(document.querySelectorAll(".floating-card"), {
+                max: 15, speed: 400, glare: true, "max-glare": 0.2
+            });
+        }
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')

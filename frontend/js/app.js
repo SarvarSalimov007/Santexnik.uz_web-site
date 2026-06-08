@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initLanguageSwitcher();
     initApp();
-    initScrollAnimations();
+    // initScrollAnimations(); // Replaced by AOS
     initMobileMenu();
     initScrollTop();
     initNavbarScroll();

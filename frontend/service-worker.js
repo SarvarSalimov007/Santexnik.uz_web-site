@@ -35,7 +35,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event
+// Fetch event - Stale-While-Revalidate Strategy
 self.addEventListener('fetch', event => {
   // Only cache GET requests
   if (event.request.method !== 'GET') return;
@@ -43,23 +43,22 @@ self.addEventListener('fetch', event => {
   if (event.request.url.includes('/api/')) return;
 
   event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
+    caches.match(event.request).then(cachedResponse => {
+      const fetchPromise = fetch(event.request).then(networkResponse => {
+        // Cache newly fetched assets
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
         }
-        return fetch(event.request).then(response => {
-          // Cache newly fetched assets
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-          return response;
-        });
-      })
+        return networkResponse;
+      }).catch(() => {
+        // Handle network failure gracefully if needed
+      });
+
+      // Return cached response immediately if available, while updating cache in background
+      return cachedResponse || fetchPromise;
+    })
   );
 });

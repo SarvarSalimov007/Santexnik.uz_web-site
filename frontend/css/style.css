@@ -1796,3 +1796,63 @@ h1, h2, h3, h4 {
     .scroll-top { bottom: 20px; right: 16px; width: 44px; height: 44px; }
 }
 
+/* ===== Toast Notifications ===== */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--surface);
+    color: var(--text);
+    padding: 16px 24px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: slideInDown 0.4s var(--ease-spring) forwards;
+    border-left: 4px solid var(--primary);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.toast.success { border-color: var(--success); }
+.toast.success i { color: var(--success); }
+.toast.error { border-color: var(--danger); }
+.toast.error i { color: var(--danger); }
+.toast.info { border-color: var(--primary); }
+.toast.info i { color: var(--primary); }
+
+@keyframes slideInDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== Floating Contact Button ===== */
+.floating-contact-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #0088cc, #005580);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0, 136, 204, 0.4);
+    z-index: 1000;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-spring);
+}
+.floating-contact-btn:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 136, 204, 0.6);
+    color: white;
+}
+
+
