@@ -1047,6 +1047,7 @@ h1, h2, h3, h4 {
     overflow-x: auto;
     padding-bottom: 8px;
     scrollbar-width: none; /* Firefox */
+    max-width: 100%;
 }
 .filter-container::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
