@@ -202,7 +202,7 @@ async function fetchStats() {
     animateCounter('statWorkers', stats.total_workers || 0);
     animateCounter('statReviews', stats.total_reviews || 0);
     animateCounter('statRating', stats.avg_rating || 0, true);
-    animateCounter('statCategories', Object.keys(stats.categories || {}).length || 8);
+    animateCounter('statCategories', Object.keys(stats.categories || {}).length || 12);
     const heroCount = document.getElementById('workerCountNumber');
     if (heroCount) heroCount.textContent = `${stats.total_workers || '500'}+`;
 }
