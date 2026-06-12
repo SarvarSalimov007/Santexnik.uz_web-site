@@ -176,6 +176,22 @@ a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 img { max-width: 100%; display: block; }
 
+/* ===== Custom Scrollbar ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-hover);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-light);
+}
+
 /* ===== Utility Classes ===== */
 .container { max-width: 1220px; margin: 0 auto; padding: 0 24px; }
 .section { padding: 100px 0; }
@@ -849,6 +865,41 @@ h1, h2, h3, h4 {
     align-items: center;
     gap: 5px;
 }
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 44px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.2rem;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all .3s var(--ease);
+    animation: bounce 2s infinite;
+    z-index: 10;
+}
+.scroll-indicator:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-glow);
+}
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+    40% { transform: translateY(-10px) translateX(-50%); }
+    60% { transform: translateY(-5px) translateX(-50%); }
+}
+
 .floating-card .icon {
     background: linear-gradient(135deg, var(--success), #059669);
     color: #fff;
@@ -989,6 +1040,16 @@ h1, h2, h3, h4 {
     margin-bottom: 40px;
     flex-wrap: wrap;
     gap: 16px;
+}
+.filter-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none; /* Firefox */
+}
+.filter-container::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }
 .filter-btn {
     background: var(--surface);
@@ -1730,14 +1791,20 @@ h1, h2, h3, h4 {
         max-width: 320px;
         overflow-y: auto;
     }
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-container {
+        width: 100%;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .filters .sort-dropdown { padding: 8px 16px; font-size: .82rem; }
 
     /* Filter buttons wrapping */
-    .filters > div:first-child {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    .filter-btn { padding: 8px 16px; font-size: .82rem; }
+    .filter-btn { padding: 8px 16px; font-size: .82rem; flex-shrink: 0; }
 }
 @media (max-width: 480px) {
     .container { padding: 0 16px; }

@@ -301,6 +301,55 @@ const TRANSLATIONS = {
         ru: "Ванная, кухня, напольная плитка",
         tj: "Ҳаммом, ошхона, плиткаи фарш"
     },
+    cat_mebel_desc: {
+        uz: "Mebel yig'ish, ta'mirlash, restavratsiya",
+        uz_cyrl: "Мебел йиғиш, таъмирлаш, реставрация",
+        en: "Furniture assembly, repair, restoration",
+        ru: "Сборка, ремонт, реставрация мебели",
+        tj: "Монтаж, таъмир, барқарорсозии мебел"
+    },
+    catname_rassomchi: {
+        uz: "Rassomchi",
+        uz_cyrl: "Рассомчи",
+        en: "Painter",
+        ru: "Маляр",
+        tj: "Рангмол"
+    },
+    cat_rassomchi_desc: {
+        uz: "Bo'yoqchilik, gulqog'oz (oboy) yopishtirish",
+        uz_cyrl: "Бўёқчилик, гулқоғоз (обой) ёпиштириш",
+        en: "Painting, wallpapering",
+        ru: "Покраска, поклейка обоев",
+        tj: "Рангкунӣ, часбондани гулқоғаз"
+    },
+    catname_tom_yopish: {
+        uz: "Tom yopish",
+        uz_cyrl: "Том ёпиш",
+        en: "Roofer",
+        ru: "Кровельщик",
+        tj: "Бомпӯш"
+    },
+    cat_tom_yopish_desc: {
+        uz: "Tom yopish, tunuka ishlari, cherepitsa",
+        uz_cyrl: "Том ёпиш, тунука ишлари, черепица",
+        en: "Roofing, tin works, tiles",
+        ru: "Кровельные, жестяные работы, черепица",
+        tj: "Бомпӯшӣ, корҳои тунукагӣ, черепитса"
+    },
+    catname_temirbeton: {
+        uz: "Temirbeton",
+        uz_cyrl: "Темирбетон",
+        en: "Concrete worker",
+        ru: "Бетонщик",
+        tj: "Бетончӣ"
+    },
+    cat_temirbeton_desc: {
+        uz: "Poydevor quyish, monolit, beton ishlari",
+        uz_cyrl: "Пойдевор қуйиш, монолит, бетон ишлари",
+        en: "Foundation pouring, monolith, concrete works",
+        ru: "Заливка фундамента, монолит, бетонные работы",
+        tj: "Рехтани таҳкурсӣ, монолит, корҳои бетонӣ"
+    },
 
     // ===== Top Workers Section =====
     top_workers_title: {

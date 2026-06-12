@@ -7,6 +7,13 @@
     <meta name="description" content="O'zbekistondagi eng yaxshi santexnik, elektrik va boshqa turdagi ustalarni toping. Reytingli, tasdiqlangan va ishonchli xizmatlar. Tez, qulay, bepul!">
     <meta name="keywords" content="santexnik, elektrik, usta, ta'mirlash, o'zbekiston, toshkent, ustalar, remont, konditsioner, plitka">
     
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="My santexnik.uz — O'zbekistondagi eng ishonchli ustalar platformasi">
+    <meta property="og:description" content="O'zbekistondagi eng yaxshi santexnik, elektrik va boshqa turdagi ustalarni toping. Reytingli, tasdiqlangan va ishonchli xizmatlar.">
+    <meta property="og:image" content="https://santexnik.uz/icon.svg">
+    <meta property="og:url" content="https://santexnik.uz">
+    <meta property="og:type" content="website">
+
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3b82f6">
@@ -112,6 +119,10 @@
                 <div class="hero-blob"></div>
             </div>
         </div>
+        <!-- Scroll Indicator -->
+        <a href="#categories" class="scroll-indicator">
+            <i class="fa-solid fa-chevron-down"></i>
+        </a>
     </header>
 
     <!-- Stats Bar -->
@@ -182,6 +193,26 @@
                     <h3 data-i18n="cat_plitka">Plitka terish</h3>
                     <p data-i18n="cat_plitka_desc">Hammom, oshxona, pol kafel</p>
                 </div>
+                <div class="category-card" data-category="mebel_usta">
+                    <div class="icon-wrapper"><i class="fa-solid fa-couch"></i></div>
+                    <h3 data-i18n="catname_mebel_usta">Mebel ustasi</h3>
+                    <p data-i18n="cat_mebel_desc">Mebel yig'ish, ta'mirlash, restavratsiya</p>
+                </div>
+                <div class="category-card" data-category="rassomchi">
+                    <div class="icon-wrapper"><i class="fa-solid fa-paint-roller"></i></div>
+                    <h3 data-i18n="catname_rassomchi">Rassomchi</h3>
+                    <p data-i18n="cat_rassomchi_desc">Bo'yoqchilik, gulqog'oz (oboy) yopishtirish</p>
+                </div>
+                <div class="category-card" data-category="tom_yopish">
+                    <div class="icon-wrapper"><i class="fa-solid fa-house-chimney"></i></div>
+                    <h3 data-i18n="catname_tom_yopish">Tom yopish</h3>
+                    <p data-i18n="cat_tom_yopish_desc">Tom yopish, tunuka ishlari, cherepitsa</p>
+                </div>
+                <div class="category-card" data-category="temirbeton">
+                    <div class="icon-wrapper"><i class="fa-solid fa-building"></i></div>
+                    <h3 data-i18n="catname_temirbeton">Temirbeton</h3>
+                    <p data-i18n="cat_temirbeton_desc">Poydevor quyish, monolit, beton ishlari</p>
+                </div>
             </div>
         </div>
     </section>
@@ -194,12 +225,20 @@
                 <p data-i18n="top_workers_desc">Mijozlar tomonidan eng yuqori baholangan mutaxassislar</p>
             </div>
             <div class="filters" data-aos="fade-up">
-                <div>
+                <div class="filter-container">
                     <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Barchasi</button>
                     <button class="filter-btn" data-filter="santexnik" data-i18n="filter_santexnik">Santexniklar</button>
                     <button class="filter-btn" data-filter="elektrik" data-i18n="filter_elektrik">Elektriklar</button>
                     <button class="filter-btn" data-filter="umumiy_tamir" data-i18n="filter_tamir">Ta'mirchilar</button>
                     <button class="filter-btn" data-filter="konditsioner" data-i18n="filter_konditsioner">Konditsioner</button>
+                    <button class="filter-btn" data-filter="duradgor" data-i18n="cat_duradgor">Duradgor</button>
+                    <button class="filter-btn" data-filter="svarka" data-i18n="cat_svarka">Svarka ishlari</button>
+                    <button class="filter-btn" data-filter="suvaqchi" data-i18n="cat_suvaq">Suvaq ishlari</button>
+                    <button class="filter-btn" data-filter="plitakash" data-i18n="cat_plitka">Plitka terish</button>
+                    <button class="filter-btn" data-filter="mebel_usta" data-i18n="catname_mebel_usta">Mebel ustasi</button>
+                    <button class="filter-btn" data-filter="rassomchi" data-i18n="catname_rassomchi">Rassomchi</button>
+                    <button class="filter-btn" data-filter="tom_yopish" data-i18n="catname_tom_yopish">Tom yopish</button>
+                    <button class="filter-btn" data-filter="temirbeton" data-i18n="catname_temirbeton">Temirbeton</button>
                 </div>
                 <div class="sort-dropdown">
                     <select id="sortSelect">
