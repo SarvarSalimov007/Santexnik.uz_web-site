@@ -19,7 +19,8 @@ const CATEGORY_ICONS = {
 };
 
 // App State
-let appState = { workers: [], currentCategory: 'all', currentSort: 'rating' };
+let appState = { workers: [], currentCategory: 'all', currentSort: 'rating', displayedCount: 8 };
+const WORKERS_PER_PAGE = 8;
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -122,53 +123,41 @@ function initLocations() {
     const districtSelect = document.getElementById('districtSelect');
     const regCitySelect = document.getElementById('regCitySelect');
     const regDistrictSelect = document.getElementById('regDistrictSelect');
+    const contactCitySelect = document.getElementById('contactCitySelect');
+    const contactDistrictSelect = document.getElementById('contactDistrictSelect');
 
     if (typeof UZ_LOCATIONS === 'undefined') return;
 
     for (const region in UZ_LOCATIONS) {
-        if(citySelect) {
-            const option = document.createElement('option');
-            option.value = region;
-            option.textContent = region;
-            citySelect.appendChild(option);
-        }
-        if(regCitySelect) {
-            const option = document.createElement('option');
-            option.value = region;
-            option.textContent = region;
-            regCitySelect.appendChild(option);
-        }
+        const makeOption = (val, text) => {
+            const o = document.createElement('option');
+            o.value = val; o.textContent = text;
+            return o;
+        };
+        if (citySelect) citySelect.appendChild(makeOption(region, region));
+        if (regCitySelect) regCitySelect.appendChild(makeOption(region, region));
+        if (contactCitySelect) contactCitySelect.appendChild(makeOption(region, region));
     }
 
-    if(citySelect) {
-        citySelect.addEventListener('change', () => {
-            const region = citySelect.value;
-            districtSelect.innerHTML = `<option value="" data-i18n="search_all_districts">${typeof t === 'function' ? t('search_all_districts') : 'Barcha tumanlar'}</option>`;
+    const bindCityDistrict = (cityEl, districtEl, defaultKey) => {
+        if (!cityEl || !districtEl) return;
+        cityEl.addEventListener('change', () => {
+            const region = cityEl.value;
+            const defaultLabel = typeof t === 'function' ? t(defaultKey) : 'Barcha tumanlar';
+            districtEl.innerHTML = `<option value="">${defaultLabel}</option>`;
             if (region && UZ_LOCATIONS[region]) {
-                UZ_LOCATIONS[region].forEach(district => {
-                    const option = document.createElement('option');
-                    option.value = district;
-                    option.textContent = district;
-                    districtSelect.appendChild(option);
+                UZ_LOCATIONS[region].forEach(d => {
+                    const o = document.createElement('option');
+                    o.value = d; o.textContent = d;
+                    districtEl.appendChild(o);
                 });
             }
         });
-    }
+    };
 
-    if(regCitySelect) {
-        regCitySelect.addEventListener('change', () => {
-            const region = regCitySelect.value;
-            regDistrictSelect.innerHTML = `<option value="" data-i18n="reg_select_district">${typeof t === 'function' ? t('reg_select_district') : 'Oldin viloyatni tanlang'}</option>`;
-            if (region && UZ_LOCATIONS[region]) {
-                UZ_LOCATIONS[region].forEach(district => {
-                    const option = document.createElement('option');
-                    option.value = district;
-                    option.textContent = district;
-                    regDistrictSelect.appendChild(option);
-                });
-            }
-        });
-    }
+    bindCityDistrict(citySelect, districtSelect, 'search_all_districts');
+    bindCityDistrict(regCitySelect, regDistrictSelect, 'reg_select_district');
+    bindCityDistrict(contactCitySelect, contactDistrictSelect, 'search_all_districts');
 }
 
 // ===== Data Fetching =====
@@ -183,7 +172,33 @@ async function fetchWorkers() {
         appState.workers = [];
         showToast('Ustalarni yuklashda xatolik yuz berdi.', 'error');
     }
+    appState.displayedCount = WORKERS_PER_PAGE;
     renderWorkers();
+    updateCategoryBadges();
+}
+
+function updateCategoryBadges() {
+    // Count workers per category
+    const counts = {};
+    appState.workers.forEach(w => {
+        counts[w.category] = (counts[w.category] || 0) + 1;
+    });
+    const total = appState.workers.length;
+
+    document.querySelectorAll('.category-card').forEach(card => {
+        const cat = card.dataset.category;
+        const count = counts[cat] || 0;
+        // Remove existing badge
+        const existing = card.querySelector('.category-count-badge');
+        if (existing) existing.remove();
+        // Add new badge
+        if (count > 0) {
+            const badge = document.createElement('div');
+            badge.className = 'category-count-badge loaded';
+            badge.textContent = `${count} usta`;
+            card.appendChild(badge);
+        }
+    });
 }
 
 async function fetchStats() {
@@ -242,6 +257,8 @@ function renderWorkers() {
     if (appState.currentSort === 'rating') filtered.sort((a, b) => b.avg_rating - a.avg_rating);
     else if (appState.currentSort === 'experience') filtered.sort((a, b) => b.experience_years - a.experience_years);
 
+
+
     if (!filtered.length) {
         const noWorkersText = typeof t === 'function' ? t('no_workers_found') : 'Bu toifada ustalar topilmadi.';
         grid.innerHTML = `
@@ -252,15 +269,17 @@ function renderWorkers() {
                 <h3 style="color: var(--text-muted); font-size: 1.2rem; margin-bottom: 10px;">${noWorkersText}</h3>
                 <p style="color: var(--text-muted); font-size: .9rem;">Iltimos, boshqa kategoriya yoki hududni tanlang</p>
             </div>`;
+        updateLoadMoreBtn(0, 0);
         return;
     }
-    filtered.forEach((w, i) => {
+
+    const toShow = filtered.slice(0, appState.displayedCount);
+    toShow.forEach((w, i) => {
         const card = createWorkerCard(w);
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
         card.style.transition = `all .5s var(--ease-out) ${i * 0.06}s`;
         grid.appendChild(card);
-        // Trigger reflow then animate
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 card.style.opacity = '1';
@@ -268,6 +287,20 @@ function renderWorkers() {
             });
         });
     });
+    updateLoadMoreBtn(toShow.length, filtered.length);
+}
+
+function updateLoadMoreBtn(shown, total) {
+    const btn = document.getElementById('loadMoreBtn');
+    if (!btn) return;
+    const remaining = total - shown;
+    if (remaining <= 0) {
+        btn.style.display = 'none';
+    } else {
+        btn.style.display = 'inline-flex';
+        const loadMoreText = typeof t === 'function' ? t('load_more') : 'Yana ko\'rsatish';
+        btn.textContent = `${loadMoreText} (${remaining} ta qoldi)`;
+    }
 }
 
 function createWorkerCard(worker) {
@@ -335,11 +368,14 @@ function generateStarsHtml(rating) {
 function setupFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
     const sortSelect = document.getElementById('sortSelect');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', e => {
             filterBtns.forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
             appState.currentCategory = e.target.dataset.filter;
+            appState.displayedCount = WORKERS_PER_PAGE;
             renderWorkers();
         });
     });
@@ -356,14 +392,32 @@ function setupFilters() {
                     filterBtns.forEach(b => { if (b.dataset.filter === 'all') b.classList.add('active'); });
                 }
                 appState.currentCategory = cat;
+                appState.displayedCount = WORKERS_PER_PAGE;
                 renderWorkers();
             }, 300);
         });
     });
     sortSelect.addEventListener('change', e => {
         appState.currentSort = e.target.value;
+        appState.displayedCount = WORKERS_PER_PAGE;
         renderWorkers();
     });
+
+    // Load More button
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            appState.displayedCount += WORKERS_PER_PAGE;
+            renderWorkers();
+            // Smooth scroll to newly loaded cards
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.worker-card');
+                if (cards.length > 0) {
+                    cards[cards.length - WORKERS_PER_PAGE > 0 ? cards.length - WORKERS_PER_PAGE : 0]
+                        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 300);
+        });
+    }
 }
 
 function setupSearch() {
@@ -644,18 +698,22 @@ function setupContactForm() {
         const orig = btn.innerHTML;
         btn.innerHTML = 'Yuborilmoqda... <i class="fa-solid fa-spinner fa-spin"></i>';
         btn.disabled = true;
+        const cityEl = document.getElementById('contactCitySelect');
+        const districtEl = document.getElementById('contactDistrictSelect');
         const data = {
             name: document.getElementById('contactName').value,
             phone: document.getElementById('contactPhone').value,
+            city: cityEl ? cityEl.value || null : null,
+            district: districtEl ? districtEl.value || null : null,
             category: document.getElementById('contactCategory').value || null,
             message: document.getElementById('contactMessage').value || null
         };
         try {
             await api.submitContactRequest(data);
-            showToast("So'rov muvaffaqiyatli yuborildi! Tez orada bog'lanamiz.", 'success');
+            showToast(typeof t === 'function' ? t('toast_request_sent') : "So'rov muvaffaqiyatli yuborildi! Tez orada bog'lanamiz.", 'success');
             form.reset();
         } catch (err) {
-            showToast("Xatolik yuz berdi. Keyinroq urinib ko'ring.", 'error');
+            showToast(typeof t === 'function' ? t('toast_error') : "Xatolik yuz berdi. Keyinroq urinib ko'ring.", 'error');
         } finally {
             btn.innerHTML = orig;
             btn.disabled = false;
@@ -803,19 +861,48 @@ async function loadWorkerReviews(workerId) {
 }
 
 // ===== Toast Notifications =====
-function showToast(msg, type = 'success') {
+function showToast(msg, type = 'success', duration = 3800) {
+    // Remove existing toast with animation
     const existing = document.querySelector('.toast');
-    if (existing) existing.remove();
-    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+    if (existing) {
+        existing.classList.add('hiding');
+        setTimeout(() => existing.remove(), 300);
+    }
+
+    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle', warning: 'fa-triangle-exclamation' };
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i> ${msg}`;
+    toast.innerHTML = `
+        <i class="fa-solid ${icons[type] || icons.info}"></i>
+        <span style="flex:1">${msg}</span>
+        <span class="toast-close" title="Yopish"><i class="fa-solid fa-xmark"></i></span>
+    `;
     document.body.appendChild(toast);
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(20px)';
+
+    // Close button
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+        toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
-    }, 3500);
+    });
+
+    // Auto hide
+    const timer = setTimeout(() => {
+        if (document.body.contains(toast)) {
+            toast.classList.add('hiding');
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, duration);
+
+    // Pause on hover
+    toast.addEventListener('mouseenter', () => clearTimeout(timer));
+    toast.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+            if (document.body.contains(toast)) {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 1500);
+    });
 }
 
 // ===== Scroll Animations =====

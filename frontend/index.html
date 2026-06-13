@@ -88,7 +88,12 @@
         <div class="container hero-container">
             <div class="hero-content">
                 <h1><span data-i18n="hero_title_1">Ishonchli va tajribali</span> <span class="gradient-text" data-i18n="hero_title_highlight">ustalarni</span> <span data-i18n="hero_title_2">toping</span></h1>
-                <p data-i18n="hero_desc">Uyingizdagi, ofis va har qanday muammoni hal qilish uchun O'zbekistondagi eng yaxshi mutaxassislarni tez va oson toping. Sifat kafolatlangan!</p>
+                <p data-i18n="hero_desc">Uyingizdagi har qanday muammoni hal qilish uchun O'zbekistondagi eng yaxshi mutaxassislarni tez va oson toping. Sifat kafolatlangan!</p>
+                <div class="hero-badges" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;">
+                    <span style="display:flex;align-items:center;gap:6px;background:var(--primary-glow);color:var(--primary);padding:6px 14px;border-radius:var(--radius-full);font-size:.85rem;font-weight:600;border:1px solid var(--border);"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="verified">Tasdiqlangan</span></span>
+                    <span style="display:flex;align-items:center;gap:6px;background:rgba(16,185,129,.1);color:var(--success);padding:6px 14px;border-radius:var(--radius-full);font-size:.85rem;font-weight:600;border:1px solid rgba(16,185,129,.2);"><i class="fa-solid fa-bolt"></i> Tez javob</span>
+                    <span style="display:flex;align-items:center;gap:6px;background:rgba(245,158,11,.1);color:var(--accent);padding:6px 14px;border-radius:var(--radius-full);font-size:.85rem;font-weight:600;border:1px solid rgba(245,158,11,.2);"><i class="fa-solid fa-star"></i> 4.9 reyting</span>
+                </div>
                 <div class="search-box" id="searchBox">
                     <div class="search-input-group">
                         <i class="fa-solid fa-search"></i>
@@ -326,6 +331,20 @@
                 <div class="form-group">
                     <label for="contactPhone" data-i18n="form_phone">Telefon raqamingiz</label>
                     <input type="tel" id="contactPhone" placeholder="+998 90 123 45 67" required>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="form-group">
+                        <label data-i18n="reg_region">Viloyat / Shahar</label>
+                        <select id="contactCitySelect">
+                            <option value="" data-i18n="search_all_regions">Barcha viloyatlar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="reg_district">Tuman / Manzil</label>
+                        <select id="contactDistrictSelect">
+                            <option value="" data-i18n="search_all_districts">Barcha tumanlar</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="contactCategory" data-i18n="form_service_type">Xizmat turi</label>
