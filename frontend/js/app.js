@@ -1016,6 +1016,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+    // Download button handler
+    const downloadBtn = document.getElementById('downloadBtn');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => {
+            fetch('assets/sample.pdf')
+                .then(resp => resp.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'sample.pdf';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                })
+                .catch(err => console.error('Download failed', err));
+        });
+    }
+
 window.addEventListener('appinstalled', (evt) => {
     console.log('INSTALL: Success');
     const installBtn = document.getElementById('installAppBtn');

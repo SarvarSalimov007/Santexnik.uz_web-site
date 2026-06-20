@@ -654,12 +654,14 @@ h1, h2, h3, h4 {
 .hero {
     padding-top: 140px;
     padding-bottom: 100px;
-    background: var(--hero-gradient);
+    background: var(--hero-gradient) url('../assets/hero.jpg') center/cover no-repeat;
     min-height: 92vh;
     display: flex;
     align-items: center;
     position: relative;
     overflow: hidden;
+    /* Apply subtle overlay for readability */
+    background-blend-mode: overlay;
 }
 .hero::before {
     content: '';
@@ -1687,14 +1689,73 @@ h1, h2, h3, h4 {
     .hero-content h1 { font-size: 2.6rem; }
     .hero-content > p { margin: 0 auto 30px; }
     .hero-content { max-width: 100%; }
-    .hero-badges { justify-content: center !important; }
-    .search-box {
-        flex-direction: column;
-        border-radius: var(--radius-xl);
-        gap: 0;
-        padding: 12px;
-        width: 100%;
-        box-sizing: border-box;
+    // Add download functionality
+    const downloadBtn = document.getElementById('downloadBtn');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => {
+            const fileUrl = 'https://example.com/download/sample.pdf'; // TODO: replace with actual file URL
+            downloadFile(fileUrl, 'sample.pdf');
+        });
+    }
+    // Download file with progress UI
+    async function downloadFile(url, filename) {
+        const response = await fetch(url);
+        if (!response.ok) {
+            showToast('Download failed', 'error');
+            return;
+        }
+        const contentLength = response.headers.get('Content-Length');
+        const total = contentLength ? parseInt(contentLength, 10) : null;
+        const reader = response.body.getReader();
+        const stream = new ReadableStream({
+            start(controller) {
+                let received = 0;
+                function push() {
+                    reader.read().then(({done, value}) => {
+                        if (done) {
+                            controller.close();
+                            return;
+                        }
+                        received += value.length;
+                        updateDownloadProgress(received, total, filename);
+                        controller.enqueue(value);
+                        push();
+                    });
+                }
+                push();
+            }
+        });
+        const blob = await new Response(stream).blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        hideDownloadProgress();
+        showToast('Download completed', 'success');
+    }
+    function updateDownloadProgress(received, total, filename) {
+        let progressContainer = document.getElementById('downloadProgressContainer');
+        if (!progressContainer) {
+            progressContainer = document.createElement('div');
+            progressContainer.id = 'downloadProgressContainer';
+            progressContainer.innerHTML = `<div class="download-progress-bar" style="width: 300px; background: var(--bg-secondary); padding: 10px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);"><div id="downloadProgress" class="download-progress" style="width: 0%; height: 8px; background: var(--primary); border-radius: var(--radius-sm);"></div></div>`;
+            document.body.appendChild(progressContainer);
+        }
+        const progressEl = document.getElementById('downloadProgress');
+        if (total) {
+            const percent = Math.round((received / total) * 100);
+            progressEl.style.width = `${percent}%`;
+        } else {
+            // Indeterminate progress
+            progressEl.style.width = '100%';
+        }
+    }
+    function hideDownloadProgress() {
+        const container = document.getElementById('downloadProgressContainer');
+        if (container) {
+            container.remove();
+        }
+    }r-box;
     }
     .search-input-group {
         padding: 16px;
