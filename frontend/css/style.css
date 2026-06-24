@@ -2099,3 +2099,20 @@ h1, h2, h3, h4 {
 .lang-pill-option .flag { font-size: 1.1rem; }
 
 
+
+/* ==== Responsive Design for Mobile (Android) ==== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .mobile-menu-btn { display: block; }
+  .navbar .container { justify-content: space-between; }
+  .hero { padding-top: 100px; padding-bottom: 80px; }
+  .hero-container { flex-direction: column; align-items: center; gap: 40px; text-align: center; }
+  .hero-content h1 { font-size: clamp(2rem, 6vw, 3rem); }
+  .search-box { flex-direction: column; gap: 8px; }
+  .category-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+@media (max-width: 480px) {
+  .logo { font-size: 1.4rem; }
+  .btn { padding: 10px 20px; font-size: 0.85rem; }
+}
