@@ -71,32 +71,51 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"Assalomu alaykum, {user.first_name}! 👋\n\n"
         "🔧 <b>Santexnik.uz</b> - O'zbekistondagi professional ustalar platformasiga xush kelibsiz.\n\n"
         "Bu bot orqali siz o'zingizga kerakli mutaxassisni (santexnik, elektrik va h.k.) tez va oson topishingiz mumkin.\n\n"
-        "👇 Quyidagi menyudan kerakli bo'limni tanlang:"
+        "📲 <b>To'g'ridan-to'g'ri ilovaga kirish uchun pastdagi tugmani bosing!</b>\n"
+        "Yoki quyidagi menyudan kerakli bo'limni tanlang:"
     )
+    
+    # Add an inline button for the WebApp as well to make it prominent
+    from telegram import WebAppInfo
+    inline_kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🚀 Saytga kirish (Mini App)", web_app=WebAppInfo(url="https://santexnik.uz"))]
+    ])
     
     await update.message.reply_text(
         welcome_text,
-        reply_markup=keyboards.main_menu_keyboard(),
+        reply_markup=inline_kb, # Give them the big inline button first
         parse_mode=ParseMode.HTML
+    )
+    # Then send the reply keyboard
+    await update.message.reply_text(
+        "Qo'shimcha funksiyalar:",
+        reply_markup=keyboards.main_menu_keyboard()
     )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send a message when the command /help is issued."""
     help_text = (
-        "📖 <b>Bot buyruqlari:</b>\n\n"
-        "/start - Botni boshlash\n"
-        "/help - Yordam\n"
-        "/search - Usta qidirish\n"
-        "/top - Eng reytingli ustalar\n"
-        "/about - Platforma haqida\n\n"
-        "📱 <b>Tugmalar:</b>\n"
-        "🔍 Usta qidirish - Kategoriya bo'yicha qidirish\n"
-        "⭐️ Reytingli ustalar - Top 5 usta\n"
-        "📋 So'rov yuborish - Usta chaqirish uchun ariza\n"
-        "ℹ️ Platforma haqida - Ma'lumot\n\n"
-        "❓ Savollar uchun: @admin_username"
+        "📖 <b>Bot yo'riqnomasi va Yordam:</b>\n\n"
+        "🔹 <b>Asosiy buyruqlar:</b>\n"
+        "🚀 /start - Botni qayta ishga tushirish va Asosiy menyuni ochish\n"
+        "❓ /help - Shu yordam xabarini ko'rish\n"
+        "🛠 /admin - (Faqat adminlar uchun) Boshqaruv paneli\n\n"
+        "🔹 <b>Qanday qilib usta topaman?</b>\n"
+        "1. Eng qulay usul: Pastdagi <b>🚀 Saytga kirish (App)</b> tugmasini bosing.\n"
+        "2. Yoki menyudan <b>🔍 Usta qidirish</b> tugmasi orqali kategoriyani tanlang.\n"
+        "3. O'z viloyatingiz va tumaningizni tanlang.\n"
+        "4. Sizga eng mos keluvchi ustalar ro'yxati chiqadi.\n\n"
+        "🔹 <b>Usta chaqirish uchun ariza:</b>\n"
+        "Agar o'zingiz qidirishni xohlamasangiz, <b>📋 So'rov yuborish</b> orqali ismingiz va raqamingizni qoldiring, biz sizga o'zimiz mos ustani topib beramiz!\n\n"
+        "📞 Savollar va murojaatlar uchun: @admin_username"
     )
-    await update.message.reply_text(help_text, parse_mode=ParseMode.HTML)
+    
+    from telegram import WebAppInfo
+    help_kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🚀 Dasturni ochish", web_app=WebAppInfo(url="https://santexnik.uz"))]
+    ])
+    
+    await update.message.reply_text(help_text, parse_mode=ParseMode.HTML, reply_markup=help_kb)
 
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):

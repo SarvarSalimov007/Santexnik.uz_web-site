@@ -1745,7 +1745,6 @@ h1, h2, h3, h4 {
         width: 95%;
         padding: 24px 20px;
         max-height: 90vh;
-        margin: 5vh auto;
         border-radius: var(--radius-xl);
     }
     .modal-content > div[style*="grid-template-columns: 1fr 1fr"] {
@@ -1834,11 +1833,8 @@ h1, h2, h3, h4 {
     }
 
     /* Register form 2-col grid to single */
-    form > div[style*="grid-template-columns: 1fr 1fr"] {
-        display: block !important;
-    }
-    form > div[style*="grid-template-columns: 1fr 1fr"] > .form-group {
-        margin-bottom: 16px;
+    form > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
     }
     
     /* Scroll top button position */

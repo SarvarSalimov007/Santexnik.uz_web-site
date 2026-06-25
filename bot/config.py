@@ -1,6 +1,6 @@
 import os
 
-BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN_HERE" # Replace with your actual bot token
+BOT_TOKEN = "8966416865:AAGT1Noq62gCAxZGtRT_jCVrP8Ln75uvi_4"
 API_BASE_URL = "http://localhost:8000" # URL of the FastAPI backend
 
 # Admins list

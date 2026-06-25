@@ -1,12 +1,12 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 from locations import REGIONS_LIST, UZ_LOCATIONS
 
 
 def main_menu_keyboard():
     keyboard = [
+        [KeyboardButton(text="🚀 Saytga kirish (App)", web_app=WebAppInfo(url="https://santexnik.uz"))],
         ["🔍 Usta qidirish", "⭐️ Reytingli ustalar"],
-        ["📋 So'rov yuborish", "ℹ️ Platforma haqida"],
-        ["🌐 Saytga o'tish"]
+        ["📋 So'rov yuborish", "ℹ️ Platforma haqida"]
     ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
