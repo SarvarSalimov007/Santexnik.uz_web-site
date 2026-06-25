@@ -1002,37 +1002,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const installBtn = document.getElementById('installAppBtn');
     const mobileInstallBtn = document.getElementById('mobileInstallAppBtn');
     const bannerInstallBtn = document.getElementById('bannerInstallBtn');
+    const bannerInstallBtn2 = document.getElementById('bannerInstallBtn2');
     
     if (isStandalone) {
         if(installBtn) installBtn.style.display = 'none';
         if(mobileInstallBtn) mobileInstallBtn.style.display = 'none';
         if(bannerInstallBtn) bannerInstallBtn.style.display = 'none';
+        if(bannerInstallBtn2) bannerInstallBtn2.style.display = 'none';
         const bannerSection = document.querySelector('.app-download-banner');
         if(bannerSection) bannerSection.style.display = 'none';
     } else {
         if(installBtn) installBtn.addEventListener('click', handleInstallClick);
         if(mobileInstallBtn) mobileInstallBtn.addEventListener('click', handleInstallClick);
         if(bannerInstallBtn) bannerInstallBtn.addEventListener('click', handleInstallClick);
+        if(bannerInstallBtn2) bannerInstallBtn2.addEventListener('click', handleInstallClick);
     }
 });
 
-    // Download button handler
-    const downloadBtn = document.getElementById('downloadBtn');
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            fetch('assets/sample.pdf')
-                .then(resp => resp.blob())
-                .then(blob => {
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'sample.pdf';
-                    a.click();
-                    URL.revokeObjectURL(url);
-                })
-                .catch(err => console.error('Download failed', err));
-        });
-    }
 
 window.addEventListener('appinstalled', (evt) => {
     console.log('INSTALL: Success');

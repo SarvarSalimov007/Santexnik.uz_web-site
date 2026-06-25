@@ -1689,73 +1689,10 @@ h1, h2, h3, h4 {
     .hero-content h1 { font-size: 2.6rem; }
     .hero-content > p { margin: 0 auto 30px; }
     .hero-content { max-width: 100%; }
-    // Add download functionality
-    const downloadBtn = document.getElementById('downloadBtn');
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            const fileUrl = 'https://example.com/download/sample.pdf'; // TODO: replace with actual file URL
-            downloadFile(fileUrl, 'sample.pdf');
-        });
-    }
-    // Download file with progress UI
-    async function downloadFile(url, filename) {
-        const response = await fetch(url);
-        if (!response.ok) {
-            showToast('Download failed', 'error');
-            return;
-        }
-        const contentLength = response.headers.get('Content-Length');
-        const total = contentLength ? parseInt(contentLength, 10) : null;
-        const reader = response.body.getReader();
-        const stream = new ReadableStream({
-            start(controller) {
-                let received = 0;
-                function push() {
-                    reader.read().then(({done, value}) => {
-                        if (done) {
-                            controller.close();
-                            return;
-                        }
-                        received += value.length;
-                        updateDownloadProgress(received, total, filename);
-                        controller.enqueue(value);
-                        push();
-                    });
-                }
-                push();
-            }
-        });
-        const blob = await new Response(stream).blob();
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        link.click();
-        hideDownloadProgress();
-        showToast('Download completed', 'success');
-    }
-    function updateDownloadProgress(received, total, filename) {
-        let progressContainer = document.getElementById('downloadProgressContainer');
-        if (!progressContainer) {
-            progressContainer = document.createElement('div');
-            progressContainer.id = 'downloadProgressContainer';
-            progressContainer.innerHTML = `<div class="download-progress-bar" style="width: 300px; background: var(--bg-secondary); padding: 10px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);"><div id="downloadProgress" class="download-progress" style="width: 0%; height: 8px; background: var(--primary); border-radius: var(--radius-sm);"></div></div>`;
-            document.body.appendChild(progressContainer);
-        }
-        const progressEl = document.getElementById('downloadProgress');
-        if (total) {
-            const percent = Math.round((received / total) * 100);
-            progressEl.style.width = `${percent}%`;
-        } else {
-            // Indeterminate progress
-            progressEl.style.width = '100%';
-        }
-    }
-    function hideDownloadProgress() {
-        const container = document.getElementById('downloadProgressContainer');
-        if (container) {
-            container.remove();
-        }
-    }r-box;
+    .search-box {
+        flex-direction: column;
+        border-radius: var(--radius-xl);
+        padding: 8px;
     }
     .search-input-group {
         padding: 16px;
@@ -2109,23 +2046,213 @@ h1, h2, h3, h4 {
   .hero-container { flex-direction: column; align-items: center; gap: 40px; text-align: center; }
   .hero-content h1 { font-size: clamp(2rem, 6vw, 3rem); }
   .search-box { flex-direction: column; gap: 8px; }
-  .category-grid { grid-template-columns: 1fr; gap: 24px; }
+  .category-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .workers-grid { grid-template-columns: 1fr; }
-}
-  .nav-links { display: none; }
-  .mobile-menu-btn { display: block; }
-  .navbar .container { justify-content: space-between; }
-  .hero { padding-top: 100px; padding-bottom: 80px; }
-  .hero-container { flex-direction: column; align-items: center; gap: 40px; text-align: center; }
-  .hero-content h1 { font-size: clamp(2rem, 6vw, 3rem); }
-  .search-box { flex-direction: column; gap: 8px; }
-  .category-grid { grid-template-columns: 1fr; gap: 24px; }
+  .apk-download-section { padding: 50px 0; }
+  .apk-download-card { flex-direction: column; text-align: center; padding: 32px 24px; }
+  .apk-download-icon { width: 80px; height: 80px; font-size: 2rem; }
+  .apk-download-info h3 { font-size: 1.3rem; }
+  .apk-download-actions { flex-direction: column; align-items: center; }
+  .apk-download-actions .btn-apk-download { width: 100%; justify-content: center; }
+  .hero-apk-btn { padding: 12px 24px; font-size: .9rem; }
 }
 
 @media (max-width: 480px) {
   .logo { font-size: 1.4rem; }
   .btn { padding: 10px 20px; font-size: 0.85rem; }
+  .category-grid { grid-template-columns: 1fr; }
+  .apk-download-card { padding: 24px 16px; }
+  .apk-download-info h3 { font-size: 1.1rem; }
 }
-  .logo { font-size: 1.4rem; }
-  .btn { padding: 10px 20px; font-size: 0.85rem; }
+
+/* ===== APK Download Section ===== */
+.apk-download-section {
+    padding: 70px 0;
+    position: relative;
+    overflow: hidden;
 }
+.apk-download-section::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(60, 209, 120, 0.08) 0%, transparent 65%);
+    pointer-events: none;
+}
+
+.apk-download-card {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-2xl);
+    padding: 42px 48px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.apk-download-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+.apk-download-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3DDC84, #00C853, #66BB6A);
+}
+.apk-download-card::after {
+    content: '';
+    position: absolute;
+    bottom: -60%;
+    right: -20%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(61, 220, 132, 0.06) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.apk-download-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #3DDC84, #00C853);
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6rem;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 8px 28px rgba(61, 220, 132, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.apk-download-info {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+.apk-download-info h3 {
+    font-size: 1.6rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+.apk-download-info p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    max-width: 480px;
+}
+.apk-download-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+.apk-download-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(61, 220, 132, 0.1);
+    color: #00C853;
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    font-size: .82rem;
+    font-weight: 600;
+    border: 1px solid rgba(61, 220, 132, 0.15);
+}
+
+.apk-download-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.btn-apk-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #3DDC84, #00C853);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .35s var(--ease);
+    box-shadow: 0 6px 24px rgba(61, 220, 132, 0.35);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+.btn-apk-download::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+    opacity: 0;
+    transition: opacity .35s;
+}
+.btn-apk-download:hover::after { opacity: 1; }
+.btn-apk-download:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(61, 220, 132, 0.45);
+    color: #fff;
+}
+.btn-apk-download:active {
+    transform: translateY(-1px);
+}
+.btn-apk-download i {
+    font-size: 1.2rem;
+}
+
+@keyframes apkPulse {
+    0% { box-shadow: 0 0 0 0 rgba(61, 220, 132, 0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(61, 220, 132, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(61, 220, 132, 0); }
+}
+.btn-apk-download.pulse {
+    animation: apkPulse 2s infinite;
+}
+
+/* Hero APK Button */
+.hero-apk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #3DDC84, #00C853);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-full);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .35s var(--ease);
+    box-shadow: 0 6px 20px rgba(61, 220, 132, 0.35);
+    animation: apkPulse 2.5s infinite;
+}
+.hero-apk-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(61, 220, 132, 0.5);
+    color: #fff;
+}
+.hero-apk-btn i {
+    font-size: 1.15rem;
+}
+
