@@ -50,7 +50,7 @@
                 <button id="installAppBtn" class="btn btn-primary btn-sm btn-pulse" style="background: var(--accent); border-color: var(--accent);" data-i18n="nav_install_app"><i class="fa-solid fa-download"></i> O'rnatish</button>
                 <button id="registerWorkerBtn" class="btn btn-primary btn-sm" style="background:var(--success); border-color:var(--success);" data-i18n="nav_register_worker">Usta bo'lib qo'shilish</button>
                 <button id="loginBtn" class="btn btn-outline btn-sm" data-i18n="nav_login">Admin Panel</button>
-                <a href="https://t.me/SantexnikUz_bot" target="_blank" class="btn btn-primary btn-sm">
+                <a href="https://t.me/Mysantexnik_bot" target="_blank" class="btn btn-primary btn-sm">
                     <i class="fa-brands fa-telegram"></i> Bot
                 </a>
             </div>
@@ -69,7 +69,7 @@
         <a href="#workers" data-i18n="nav_workers">Ustalar</a>
         <a href="#about" data-i18n="nav_how_works">Qanday ishlaydi</a>
         <a href="#contact" data-i18n="nav_contact">Bog'lanish</a>
-        <a href="https://t.me/SantexnikUz_bot" target="_blank"><i class="fa-brands fa-telegram"></i> <span data-i18n="telegram_bot">Telegram Bot</span></a>
+        <a href="https://t.me/Mysantexnik_bot" target="_blank"><i class="fa-brands fa-telegram"></i> <span data-i18n="telegram_bot">Telegram Bot</span></a>
         
         <div style="padding: 16px 0 8px;">
             <a href="/app-apk-5ce38c8d1971484a85a9ddd5da483e71-1782285605.apk" download="Santexnik.uz.apk" class="btn btn-sm" style="background: linear-gradient(135deg, #3DDC84, #00C853); color: #fff; border: none; width: 100%; margin-bottom: 10px;"><i class="fa-brands fa-android"></i> Android APK yuklab olish</a>
@@ -328,25 +328,7 @@
         </div>
     </section>
 
-    <!-- App Download Banner -->
-    <section class="app-download-banner section">
-        <div class="container banner-container" data-aos="zoom-in">
-            <div class="banner-content">
-                <h2 data-i18n="banner_title">My santexnik dasturini o'rnating!</h2>
-                <p data-i18n="banner_desc">Saytni telefoningiz yoki kompyuteringizga dastur (PWA) sifatida o'rnatib oling. Bu sizga internet sekin bo'lganda ham ustalarni tezroq topish imkonini beradi va xotiradan joy olmaydi.</p>
-                <div class="banner-features">
-                    <span><i class="fa-solid fa-bolt"></i> Tezroq ishlash</span>
-                    <span><i class="fa-solid fa-mobile-screen"></i> Qulay interfeys</span>
-                    <span><i class="fa-solid fa-memory"></i> Xotiradan joy olmaydi</span>
-                </div>
-                <button id="bannerInstallBtn2" class="btn btn-primary btn-pulse banner-btn" style="background: #fff; color: var(--primary);"><i class="fa-solid fa-download"></i> <span data-i18n="nav_install_app">O'rnatish</span></button>
-            </div>
-            <div class="banner-visual">
-                <i class="fa-solid fa-mobile-screen-button" style="font-size: 8rem; color: rgba(255,255,255,0.9); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));"></i>
-                <i class="fa-solid fa-laptop" style="font-size: 6rem; color: rgba(255,255,255,0.7); position: absolute; right: -20px; bottom: 10px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));"></i>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Contact Section -->
     <section id="contact" class="contact-section section">
@@ -513,7 +495,12 @@
                     <textarea name="description" rows="3" data-i18n-placeholder="reg_about_placeholder" placeholder="Masalan: 10 yillik tajribaga ega ustaman..."></textarea>
                 </div>
                 
-
+                <div class="form-group" style="margin-top: 20px; padding: 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); border-radius: var(--radius-md);">
+                    <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; color: var(--text);">
+                        <input type="checkbox" name="consent_fee" required style="width: auto; margin-top: 4px;"> 
+                        <span style="font-size: 0.95rem;" data-i18n-html="reg_consent">Sayt orqali topilgan mijozlardan olingan pul o'tkazmalaridan <strong>2% miqdorida komissiya haqi</strong> ushlab qolinishiga roziman.</span>
+                    </label>
+                </div>
 
                 <button type="submit" class="btn btn-primary w-100" style="padding:14px; margin-top: 20px; background: var(--success); box-shadow: 0 4px 14px rgba(16,185,129,0.3);" data-i18n="reg_submit">Ro'yxatdan o'tish</button>
             </form>
@@ -577,7 +564,7 @@
     <button class="scroll-top" id="scrollTopBtn"><i class="fa-solid fa-arrow-up"></i></button>
 
     <!-- Floating Contact Widget -->
-    <a href="https://t.me/SantexnikUz_bot" target="_blank" class="floating-contact-btn btn-pulse" title="Telegram orqali bog'lanish" data-aos="zoom-in" data-aos-anchor-placement="bottom-bottom">
+    <a href="https://t.me/Mysantexnik_bot" target="_blank" class="floating-contact-btn btn-pulse" title="Telegram orqali bog'lanish" data-aos="zoom-in" data-aos-anchor-placement="bottom-bottom">
         <i class="fa-brands fa-telegram" style="font-size: 24px;"></i>
     </a>
 
@@ -587,7 +574,7 @@
     <script type="module" src="js/telegram_bot.js"></script>
     <script type="module">
       import { initTelegramWidget } from './js/telegram_bot.js';
-      initTelegramWidget('SantexnikUz_bot');
+      initTelegramWidget('Mysantexnik_bot');
     </script>
     <script type="module" src="js/news.js"></script>
     <script src="js/translations.js"></script>
