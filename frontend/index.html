@@ -47,7 +47,7 @@
                 <button class="theme-cycle-btn" id="themeCycleBtn" title="Rejimni o'zgartirish">
                     <i class="fa-solid fa-sun"></i>
                 </button>
-                <a href="/app-apk-5ce38c8d1971484a85a9ddd5da483e71-1782285605.apk" download="Santexnik.uz.apk" class="btn btn-primary btn-sm btn-pulse" style="background: var(--accent); border-color: var(--accent); text-decoration: none;" data-i18n="nav_install_app"><i class="fa-solid fa-download"></i> O'rnatish</a>
+                <button id="installAppBtn" class="btn btn-primary btn-sm btn-pulse" style="background: var(--accent); border-color: var(--accent);" data-i18n="nav_install_app"><i class="fa-solid fa-download"></i> O'rnatish</button>
                 <button id="registerWorkerBtn" class="btn btn-primary btn-sm" style="background:var(--success); border-color:var(--success);" data-i18n="nav_register_worker">Usta bo'lib qo'shilish</button>
                 <button id="loginBtn" class="btn btn-outline btn-sm" data-i18n="nav_login">Admin Panel</button>
                 <a href="https://t.me/SantexnikUz_bot" target="_blank" class="btn btn-primary btn-sm">
@@ -564,10 +564,14 @@
                     <li>Ro'yxatdan <strong>Ekranga qo'shish (Add to Home Screen) <i class="fa-regular fa-square-plus" style="font-size:0.85rem"></i></strong> ni tanlang.</li>
                 </ol>
                 <h4 style="margin-bottom: 12px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;"><i class="fa-brands fa-android" style="font-size: 1.2rem; color: #3DDC84;"></i> Android uchun:</h4>
-                <ol style="padding-left: 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                <ol style="padding-left: 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;">
                     <li>Brauzer menyusidan <strong>(⋮)</strong> bosing.</li>
                     <li><strong>Ekranga qo'shish (Add to Home screen)</strong> ni tanlang.</li>
                 </ol>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span style="display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">Yoki Android ilovasini to'g'ridan-to'g'ri yuklab oling:</span>
+                    <a href="/app-apk-5ce38c8d1971484a85a9ddd5da483e71-1782285605.apk" download="Santexnik.uz.apk" class="btn btn-sm" style="background: linear-gradient(135deg, #3DDC84, #00C853); color: #fff; border: none; width: 100%;"><i class="fa-brands fa-android"></i> Android APK yuklab olish (~32MB)</a>
+                </div>
             </div>
 
             <button id="confirmInstallBtn" class="btn btn-primary w-100 btn-pulse" style="padding: 14px; font-size: 1.1rem; background: var(--accent); border-color: var(--accent);" data-i18n="install_btn_confirm"><i class="fa-solid fa-download"></i> Hozir o'rnatish</button>
