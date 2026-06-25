@@ -1714,8 +1714,10 @@ h1, h2, h3, h4 {
     .stats-bar {
         gap: 24px;
         flex-wrap: wrap;
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        max-width: 900px;
     }
 }
 @media (max-width: 1150px) {
