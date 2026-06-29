@@ -32,7 +32,7 @@ def main():
 
     # Run the bot until the user presses Ctrl-C
     logger.info("🤖 Santexnik.uz bot ishga tushdi!")
-    application.run_polling(allowed_updates=Update.ALL_UPDATES)
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
     main()
