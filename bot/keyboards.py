@@ -4,7 +4,7 @@ from locations import REGIONS_LIST, UZ_LOCATIONS
 
 def main_menu_keyboard():
     keyboard = [
-        [KeyboardButton(text="🚀 Saytga kirish (App)", web_app=WebAppInfo(url="https://santexnik.uz"))],
+        [KeyboardButton(text="🚀 Saytga kirish (App)", web_app=WebAppInfo(url="https://mysantexnik-uz.vercel.app"))],
         ["🔍 Usta qidirish", "⭐️ Reytingli ustalar"],
         ["📋 So'rov yuborish", "ℹ️ Platforma haqida"]
     ]

@@ -79,7 +79,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Add an inline button for the WebApp as well to make it prominent
     from telegram import WebAppInfo
     inline_kb = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🚀 Saytga kirish (Mini App)", web_app=WebAppInfo(url="https://santexnik.uz"))]
+        [InlineKeyboardButton("🚀 Saytga kirish (Mini App)", web_app=WebAppInfo(url="https://mysantexnik-uz.vercel.app"))]
     ])
     
     await update.message.reply_text(
@@ -113,7 +113,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     from telegram import WebAppInfo
     help_kb = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🚀 Dasturni ochish", web_app=WebAppInfo(url="https://santexnik.uz"))]
+        [InlineKeyboardButton("🚀 Dasturni ochish", web_app=WebAppInfo(url="https://mysantexnik-uz.vercel.app"))]
     ])
     
     await update.message.reply_text(help_text, parse_mode=ParseMode.HTML, reply_markup=help_kb)
@@ -256,7 +256,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     
     elif text == "🌐 Saytga o'tish":
-        keyboard = [[InlineKeyboardButton("🌐 Saytga o'tish", url="https://santexnik.uz")]]
+        keyboard = [[InlineKeyboardButton("🌐 Saytga o'tish", url="https://mysantexnik-uz.vercel.app")]]
         await update.message.reply_text(
             "Saytimizda barcha ustalarning to'liq profillari va aloqa ma'lumotlari mavjud.",
             reply_markup=InlineKeyboardMarkup(keyboard)
