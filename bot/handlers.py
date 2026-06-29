@@ -41,6 +41,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 cat = category_names.get(worker['category'], worker['category'])
                 stars = "⭐️" * int(worker['avg_rating'])
                 
+                desc = worker.get('description') or "Ma'lumot kiritilmagan"
                 msg = (
                     f"👨‍🔧 <b>{worker['full_name']}</b>\n\n"
                     f"📋 <b>Kasbi:</b> {cat}\n"
@@ -48,7 +49,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     f"🏗 <b>Tajriba:</b> {worker['experience_years']} yil\n"
                     f"💰 <b>Narx:</b> {worker.get('price_range', 'Kelishilgan')}\n"
                     f"⭐️ <b>Reyting:</b> {worker['avg_rating']} ({worker['total_reviews']} ta izoh)\n\n"
-                    f"📝 {worker.get('description', 'Ma\\'lumot kiritilmagan')}"
+                    f"📝 {desc}"
                 )
                 
                 keyboard = [
@@ -343,6 +344,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 w = response.json()
                 cat = category_names.get(w['category'], w['category'])
                 
+                desc = w.get('description') or "Ma'lumot kiritilmagan"
                 msg = (
                     f"👨‍🔧 <b>{w['full_name']}</b>\n\n"
                     f"📋 <b>Kasbi:</b> {cat}\n"
@@ -350,7 +352,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     f"🏗 <b>Tajriba:</b> {w['experience_years']} yil\n"
                     f"💰 <b>Narx:</b> {w.get('price_range', 'Kelishilgan')}\n"
                     f"⭐️ <b>Reyting:</b> {w['avg_rating']} ({w['total_reviews']} ta izoh)\n\n"
-                    f"📝 {w.get('description', 'Ma\\'lumot kiritilmagan')}"
+                    f"📝 {desc}"
                 )
                 
                 await query.edit_message_text(
