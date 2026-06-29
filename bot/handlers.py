@@ -70,7 +70,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     welcome_text = (
         f"Assalomu alaykum, {user.first_name}! 👋\n\n"
-        "🔧 <b>Santexnik.uz</b> - O'zbekistondagi professional ustalar platformasiga xush kelibsiz.\n\n"
+        "🔧 <b>Mysantexnik-uz</b> - O'zbekistondagi professional ustalar platformasiga xush kelibsiz.\n\n"
         "Bu bot orqali siz o'zingizga kerakli mutaxassisni (santexnik, elektrik va h.k.) tez va oson topishingiz mumkin.\n\n"
         "📲 <b>To'g'ridan-to'g'ri ilovaga kirish uchun pastdagi tugmani bosing!</b>\n"
         "Yoki quyidagi menyudan kerakli bo'limni tanlang:"
@@ -239,7 +239,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         avg_rating = stats.get("avg_rating", "4.8")
         
         await update.message.reply_text(
-            "🔧 <b>Santexnik.uz</b> - bu uy va ofisdagi nosozliklarni "
+            "🔧 <b>Mysantexnik-uz</b> - bu uy va ofisdagi nosozliklarni "
             "bartaraf etish uchun eng malakali ustalarni topish platformasi.\n\n"
             f"📊 <b>Statistika:</b>\n"
             f"👷 Faol ustalar: {total_workers}\n"
@@ -251,7 +251,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• Qulay va tez qidiruv\n"
             "• Ochiq va adolatli narxlar\n"
             "• Telegram va veb-sayt integratsiyasi\n\n"
-            "🌐 Sayt: santexnik.uz",
+            "🌐 Sayt: mysantexnik-uz.vercel.app",
             parse_mode=ParseMode.HTML
         )
     
