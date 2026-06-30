@@ -76,21 +76,21 @@ const TRANSLATIONS = {
         uz_cyrl: "Ишончли ва тажрибали",
         en: "Find reliable and experienced",
         ru: "Найдите надёжных и опытных",
-        tj: "Устоҳои боэътимод ва ботаҷрибаро"
+        tj: "Боэътимод ва ботаҷриба"
     },
     hero_title_highlight: {
         uz: "ustalarni",
         uz_cyrl: "усталарни",
         en: "workers",
         ru: "мастеров",
-        tj: "ёбед"
+        tj: "устоҳоро"
     },
     hero_title_2: {
         uz: "toping",
         uz_cyrl: "топинг",
         en: "",
         ru: "",
-        tj: ""
+        tj: "ёбед"
     },
     hero_desc: {
         uz: "Uyingizdagi har qanday muammoni hal qilish uchun O'zbekistondagi eng yaxshi mutaxassislarni tez va oson toping. Sifat kafolatlangan!",
