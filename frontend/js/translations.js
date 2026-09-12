@@ -88,8 +88,8 @@ const TRANSLATIONS = {
     hero_title_2: {
         uz: "toping",
         uz_cyrl: "топинг",
-        en: "",
-        ru: "",
+        en: " ",
+        ru: " ",
         tj: "ёбед"
     },
     hero_desc: {
@@ -98,6 +98,27 @@ const TRANSLATIONS = {
         en: "Quickly and easily find the best specialists in Uzbekistan to solve any problem in your home. Quality guaranteed!",
         ru: "Быстро и легко найдите лучших специалистов в Узбекистане для решения любой проблемы в вашем доме. Качество гарантировано!",
         tj: "Мутахассисони беҳтарини Ӯзбекистонро барои ҳалли ҳар гуна мушкилот дар хонаатон зуд ва осон пайдо кунед. Сифат кафолат дода мешавад!"
+    },
+    verified: {
+        uz: "Tasdiqlangan",
+        uz_cyrl: "Тасдиқланган",
+        en: "Verified",
+        ru: "Подтверждён",
+        tj: "Тасдиқшуда"
+    },
+    fast_response: {
+        uz: "Tez javob",
+        uz_cyrl: "Тез жавоб",
+        en: "Fast response",
+        ru: "Быстрый ответ",
+        tj: "Ҷавоби зуд"
+    },
+    high_rating: {
+        uz: "4.9 reyting",
+        uz_cyrl: "4.9 рейтинг",
+        en: "4.9 rating",
+        ru: "4.9 рейтинг",
+        tj: "4.9 рейтинг"
     },
     search_placeholder: {
         uz: "Qanday usta kerak? (masalan: Santexnik)",
