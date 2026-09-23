@@ -204,8 +204,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 
                 category_emojis = {
                     "santexnik": "🚰", "elektrik": "⚡️", "umumiy_tamir": "🔨",
-                    "konditsioner": "❄️", "duradgor": "🪚", "suvaqchi": "🧱",
-                    "plitakash": "🔲", "svarka": "⚙️", "mebel_usta": "🪑",
+                    "konditsioner": "❄️", "duradgor": "🪚", "suvoqchi": "🧱",
+                    "plitakash": "🔲", "chilangar": "⚙️", "mebel_usta": "🪑",
                 }
                 
                 msg = "🏆 <b>Eng yuqori reytingli ustalar:</b>\n\n"
