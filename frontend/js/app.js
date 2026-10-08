@@ -664,18 +664,9 @@ function setupModals() {
             btn.textContent = 'Kirilmoqda...';
             btn.disabled = true;
 
-            // Mock login for Vercel Demo
-            if (username === 'Sarvar' && password === 'exa1122211') {
-                localStorage.setItem('access_token', 'mock_token_for_demo');
-                localStorage.setItem('admin_user', 'Sarvar');
-                showToast(typeof t === 'function' ? t('toast_login_success') : 'Muvaffaqiyatli kirdingiz!', 'success');
-                loginModal.style.display = 'none';
-                setTimeout(() => { window.location.href = 'admin.html'; }, 1000);
-                return;
-            }
-
             const result = await api.login(username, password);
             localStorage.setItem('access_token', result.access_token);
+            localStorage.setItem('admin_user', username);
             showToast(typeof t === 'function' ? t('toast_login_success') : 'Muvaffaqiyatli kirdingiz!', 'success');
             loginModal.style.display = 'none';
             setTimeout(() => { window.location.href = 'admin.html'; }, 1000);

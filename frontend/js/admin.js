@@ -137,34 +137,36 @@ function showToast(msg, type = 'success') {
 // ===== API Integration =====
 
 async function loadDashboardData() {
+    // 1. Load Stats
     try {
         adminState.stats = await api.getStats();
-        
-        // Demo fallback for Vercel
-        if (!adminState.stats || !adminState.stats.total_workers) {
-            throw new Error('API down');
-        }
+        document.getElementById('dashTotalWorkers').textContent = adminState.stats.total_workers || 0;
+        document.getElementById('dashTotalReviews').textContent = adminState.stats.total_reviews || 0;
+        document.getElementById('dashAvgRating').textContent = (adminState.stats.avg_rating || 0).toFixed(1);
+    } catch (e) {
+        console.warn('Stats fetch failed', e);
+        document.getElementById('dashTotalWorkers').textContent = '0';
+        document.getElementById('dashTotalReviews').textContent = '0';
+        document.getElementById('dashAvgRating').textContent = '0.0';
+    }
 
-        document.getElementById('dashTotalWorkers').textContent = adminState.stats.total_workers;
-        document.getElementById('dashTotalReviews').textContent = adminState.stats.total_reviews;
-        document.getElementById('dashAvgRating').textContent = adminState.stats.avg_rating.toFixed(1);
-        
-        // Count pending leads
+    // 2. Load Leads (Contacts)
+    try {
         const leads = await api.getContacts();
         const pendingCount = leads.filter(l => !l.is_processed).length;
         document.getElementById('dashPendingLeads').textContent = pendingCount;
-        
-        // Recent workers
+    } catch (e) {
+        console.warn('Leads fetch failed', e);
+        document.getElementById('dashPendingLeads').textContent = '0';
+    }
+
+    // 3. Load Recent Workers
+    try {
         const workers = await api.getWorkers({ include_inactive: true });
         adminState.workers = workers;
         renderRecentWorkers(workers.slice(0, 5));
-
     } catch (e) {
-        console.warn('Dashboard data fetch failed, using demo data', e);
-        document.getElementById('dashTotalWorkers').textContent = '12';
-        document.getElementById('dashTotalReviews').textContent = '45';
-        document.getElementById('dashAvgRating').textContent = '4.8';
-        document.getElementById('dashPendingLeads').textContent = '3';
+        console.warn('Workers fetch failed', e);
     }
 }
 
