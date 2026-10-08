@@ -24,10 +24,10 @@ const WORKERS_PER_PAGE = 8;
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
+    if (typeof initAuthUI === 'function') initAuthUI();
     initTheme();
     initLanguageSwitcher();
     initApp();
-    // initScrollAnimations(); // Replaced by AOS
     initMobileMenu();
     initScrollTop();
     initNavbarScroll();
@@ -599,12 +599,20 @@ function setupModals() {
         document.getElementById('mobileOverlay').classList.remove('open');
         document.body.style.overflow = '';
     });
-    if(registerWorkerBtn) registerWorkerBtn.addEventListener('click', () => registerWorkerModal.style.display = 'flex');
+    
+    // Auth Guards for Worker Registration
+    const handleRegisterClick = () => {
+        requireAuth(() => {
+            registerWorkerModal.style.display = 'flex';
+        }, "Usta bo'lib ro'yxatdan o'tish uchun avval tizimga kiring");
+    };
+
+    if(registerWorkerBtn) registerWorkerBtn.addEventListener('click', handleRegisterClick);
     if(mobileRegisterWorkerBtn) mobileRegisterWorkerBtn.addEventListener('click', () => {
-        registerWorkerModal.style.display = 'flex';
         document.getElementById('mobileMenu').classList.remove('open');
         document.getElementById('mobileOverlay').classList.remove('open');
         document.body.style.overflow = '';
+        handleRegisterClick();
     });
     
     closeBtns.forEach(btn => btn.addEventListener('click', function () { this.closest('.modal').style.display = 'none'; }));
@@ -640,7 +648,10 @@ function setupModals() {
                     formData.set('consent_fee', 'true');
                 }
                 
-                await api.registerWorker(formData);
+                const newWorker = await api.registerWorker(formData);
+                if (typeof UserAuth !== 'undefined') {
+                    UserAuth.linkToWorker(newWorker.id);
+                }
                 showToast(typeof t === 'function' ? t('toast_register_success') : 'Arizangiz muvaffaqiyatli yuborildi!', 'success');
                 regForm.reset();
                 if(registerWorkerModal) registerWorkerModal.style.display = 'none';
@@ -685,6 +696,14 @@ function setupContactForm() {
     if (!form) return;
     form.addEventListener('submit', async e => {
         e.preventDefault();
+        
+        // Require login to submit contact request
+        if (typeof UserAuth !== 'undefined' && !UserAuth.isLoggedIn()) {
+            showToast("Usta chaqirish uchun avval tizimga kiring", 'warning');
+            openAuthModal('login');
+            return;
+        }
+
         const btn = form.querySelector('.btn-submit');
         const orig = btn.innerHTML;
         btn.innerHTML = 'Yuborilmoqda... <i class="fa-solid fa-spinner fa-spin"></i>';
@@ -791,6 +810,19 @@ window.showWorkerProfile = async function (id) {
         const rating = reviewForm.querySelector('input[name="rating"]:checked');
         const comment = document.getElementById('reviewComment').value;
 
+        // Check if user is logged in
+        if (typeof UserAuth !== 'undefined' && !UserAuth.isLoggedIn()) {
+            showToast("Sharh qoldirish uchun avval tizimga kiring", 'warning');
+            openAuthModal('login');
+            return;
+        }
+
+        // Check if user is trying to review themselves
+        if (typeof UserAuth !== 'undefined' && UserAuth.isCurrentUserWorker(worker.id)) {
+            showToast("Siz o'zingizga sharh qoldira olmaysiz", 'error');
+            return;
+        }
+
         if (!rating) {
             showToast('Iltimos, reyting tanlang (yulduzlar)', 'error');
             return;
@@ -802,9 +834,11 @@ window.showWorkerProfile = async function (id) {
         btn.disabled = true;
 
         try {
+            const currentUser = typeof UserAuth !== 'undefined' ? UserAuth.getCurrentUser() : null;
             await api.createReview(worker.id, {
                 rating: parseInt(rating.value),
-                comment: comment || null
+                comment: comment || null,
+                user: currentUser ? { full_name: currentUser.full_name } : null
             });
             showToast('Izohingiz muvaffaqiyatli qo\'shildi!', 'success');
             reviewForm.reset();
