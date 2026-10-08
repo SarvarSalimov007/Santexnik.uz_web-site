@@ -76,10 +76,11 @@ const UserAuth = {
 
     // Google sign-in (simulated for demo)
     googleSignIn() {
+        const userName = prompt("Google orqali kirish (Taqdimot uchun simulyatsiya):\nIltimos ismingizni kiriting:", "Sardor");
+        if (!userName) throw new Error("Bekor qilindi");
+
         const randomId = Date.now();
-        const names = ['Shaxzod Aliyev', 'Dilnoza Karimova', 'Jasur Toshmatov', 'Nodira Rahimova', 'Bekzod Umarov'];
-        const randomName = names[Math.floor(Math.random() * names.length)];
-        const email = randomName.toLowerCase().replace(' ', '.') + '@gmail.com';
+        const email = userName.toLowerCase().replace(/\s+/g, '.') + '@gmail.com';
 
         const users = this._getUsersDb();
         let existingUser = users.find(u => u.email === email);
@@ -87,7 +88,7 @@ const UserAuth = {
         if (!existingUser) {
             existingUser = {
                 id: randomId,
-                full_name: randomName,
+                full_name: userName,
                 email: email,
                 password: null,
                 avatar: null,
