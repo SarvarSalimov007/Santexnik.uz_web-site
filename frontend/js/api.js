@@ -141,7 +141,14 @@ class ApiService {
                 }
 
                 if (url.includes('/token')) {
-                    resolve({ access_token: 'demo_token' });
+                    const username = options.body.get('username');
+                    const password = options.body.get('password');
+                    if (username === 'Sarvar' && password === 'exa1122211') {
+                        resolve({ access_token: 'demo_token' });
+                    } else {
+                        // Reject manually simulating HTTP 401
+                        resolve(Promise.reject(new Error("Login yoki parol noto'g'ri!")));
+                    }
                     return;
                 }
 
