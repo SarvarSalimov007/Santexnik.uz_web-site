@@ -1167,6 +1167,106 @@ const TRANSLATIONS = {
         ru: "Плиточник",
         tj: "Плиткагузор"
     },
+    
+    // Auth translations
+    nav_login_user: {
+        uz: "Kirish",
+        uz_cyrl: "Кириш",
+        en: "Log in",
+        ru: "Войти",
+        tj: "Вуруд"
+    },
+    auth_login_tab: {
+        uz: "Kirish",
+        uz_cyrl: "Кириш",
+        en: "Log in",
+        ru: "Вход",
+        tj: "Вуруд"
+    },
+    auth_signup_tab: {
+        uz: "Ro'yxatdan o'tish",
+        uz_cyrl: "Рўйхатдан ўтиш",
+        en: "Sign up",
+        ru: "Регистрация",
+        tj: "Бақайдгирӣ"
+    },
+    auth_email_label: {
+        uz: "Email",
+        uz_cyrl: "Email",
+        en: "Email",
+        ru: "Email",
+        tj: "Email"
+    },
+    auth_pass_label: {
+        uz: "Parol",
+        uz_cyrl: "Парол",
+        en: "Password",
+        ru: "Пароль",
+        tj: "Рамз"
+    },
+    auth_name_label: {
+        uz: "To'liq ismingiz",
+        uz_cyrl: "Тўлиқ исмингиз",
+        en: "Full name",
+        ru: "Полное имя",
+        tj: "Ному насаб"
+    },
+    auth_login_btn: {
+        uz: "Kirish",
+        uz_cyrl: "Кириш",
+        en: "Log in",
+        ru: "Войти",
+        tj: "Вуруд"
+    },
+    auth_signup_btn: {
+        uz: "Ro'yxatdan o'tish",
+        uz_cyrl: "Рўйхатдан ўтиш",
+        en: "Sign up",
+        ru: "Зарегистрироваться",
+        tj: "Бақайдгирӣ"
+    },
+    auth_google_login: {
+        uz: "Google bilan kirish",
+        uz_cyrl: "Google билан кириш",
+        en: "Log in with Google",
+        ru: "Войти через Google",
+        tj: "Бо Google ворид шудан"
+    },
+    auth_google_signup: {
+        uz: "Google bilan ro'yxatdan o'tish",
+        uz_cyrl: "Google билан рўйхатдан ўтиш",
+        en: "Sign up with Google",
+        ru: "Регистрация через Google",
+        tj: "Бо Google ба қайд гирифтан"
+    },
+    auth_no_account: {
+        uz: "Hisobingiz yo'qmi?",
+        uz_cyrl: "Ҳисобингиз йўқми?",
+        en: "Don't have an account?",
+        ru: "Нет аккаунта?",
+        tj: "Ҳисоб надоред?"
+    },
+    auth_has_account: {
+        uz: "Hisobingiz bormi?",
+        uz_cyrl: "Ҳисобингиз борми?",
+        en: "Already have an account?",
+        ru: "Уже есть аккаунт?",
+        tj: "Ҳисоб доред?"
+    },
+    auth_logout: {
+        uz: "Chiqish",
+        uz_cyrl: "Чиқиш",
+        en: "Log out",
+        ru: "Выйти",
+        tj: "Баромадан"
+    },
+    auth_or: {
+        uz: "yoki",
+        uz_cyrl: "ёки",
+        en: "or",
+        ru: "или",
+        tj: "ё"
+    }
 };
 
 // ===== Language Configuration =====

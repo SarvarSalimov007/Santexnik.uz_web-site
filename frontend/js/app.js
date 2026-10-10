@@ -24,6 +24,14 @@ const WORKERS_PER_PAGE = 8;
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
+    // Inject dynamic CSS overrides
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @media (min-width: 992px) { .navbar .container { max-width: 1400px !important; padding-left: 20px !important; padding-right: 20px !important; } }
+        @media (min-width: 1200px) { .navbar .container { max-width: 1600px !important; padding-left: 30px !important; padding-right: 30px !important; } }
+    `;
+    document.head.appendChild(style);
+
     if (typeof initAuthUI === 'function') initAuthUI();
     initTheme();
     initLanguageSwitcher();

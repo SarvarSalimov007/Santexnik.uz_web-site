@@ -5,6 +5,9 @@ from telegram.constants import ParseMode
 import keyboards
 import requests
 from config import API_BASE_URL, SUPER_ADMIN_ID
+
+# Timeout for API requests (seconds) - prevents bot from hanging on server
+API_TIMEOUT = 10
 from locations import REGIONS_LIST, UZ_LOCATIONS
 
 
@@ -375,10 +378,22 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data == "back_to_main":
         await query.edit_message_text("Asosiy menyu. Pastdagi tugmalardan foydalaning. 👇")
         
+    elif data.startswith("contact_cat_"):
+        # Contact request category selection
+        # NOTE: This MUST be checked BEFORE "contact_" to avoid false matches
+        category = data.split("contact_cat_")[1]
+        if user_id in USER_STATE:
+            USER_STATE[user_id]["category"] = category
+            USER_STATE[user_id]["action"] = "contact_request_message"
+            await query.edit_message_text(
+                f"✅ Kategoriya tanlandi.\n\n"
+                "📝 Endi muammoingizni qisqacha tasvirlab bering:"
+            )
+    
     elif data.startswith("contact_"):
         worker_id = data.split("_")[1]
         try:
-            response = requests.get(f"{API_BASE_URL}/workers/{worker_id}")
+            response = requests.get(f"{API_BASE_URL}/workers/{worker_id}", timeout=API_TIMEOUT)
             if response.status_code == 200:
                 worker = response.json()
                 tg = worker.get('telegram_username')
@@ -419,17 +434,6 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     elif data == "cancel_rating":
         await query.edit_message_text("Baho berish bekor qilindi. ❌")
-    
-    elif data.startswith("contact_cat_"):
-        # Contact request category selection
-        category = data.split("contact_cat_")[1]
-        if user_id in USER_STATE:
-            USER_STATE[user_id]["category"] = category
-            USER_STATE[user_id]["action"] = "contact_request_message"
-            await query.edit_message_text(
-                f"✅ Kategoriya tanlandi.\n\n"
-                "📝 Endi muammoingizni qisqacha tasvirlab bering:"
-            )
 
 
 # ==============================

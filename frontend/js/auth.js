@@ -74,37 +74,57 @@ const UserAuth = {
         return sessionUser;
     },
 
-    // Google sign-in (simulated for demo)
+    // Google sign-in (simulated one-click automatic login for demo)
     googleSignIn() {
-        const userName = prompt("Google orqali kirish (Taqdimot uchun simulyatsiya):\nIltimos ismingizni kiriting:", "Sardor");
-        if (!userName) throw new Error("Bekor qilindi");
+        const self = this;
+        return new Promise((resolve) => {
+            // Remove old mock if exists
+            const oldMock = document.getElementById('mockGoogleOAuth');
+            if (oldMock) oldMock.remove();
 
-        const randomId = Date.now();
-        const email = userName.toLowerCase().replace(/\s+/g, '.') + '@gmail.com';
+            // Kichik yuklanish oynasini ko'rsatish
+            const overlay = document.createElement('div');
+            overlay.id = 'mockGoogleOAuth';
+            overlay.className = 'mock-google-overlay';
+            overlay.innerHTML = `
+                <div class="mock-google-card" style="text-align: center; padding: 30px;">
+                    <div class="spinner" style="margin: 0 auto 15px; border-top-color: #4285F4; border-left-color: #EA4335; border-bottom-color: #FBBC05; border-right-color: #34A853;"></div>
+                    <h3 style="font-family: 'Outfit', sans-serif; color: #333;">Google bilan bog'lanilmoqda...</h3>
+                </div>
+            `;
+            document.body.appendChild(overlay);
 
-        const users = this._getUsersDb();
-        let existingUser = users.find(u => u.email === email);
-        
-        if (!existingUser) {
-            existingUser = {
-                id: randomId,
-                full_name: userName,
-                email: email,
-                password: null,
-                avatar: null,
-                provider: 'google',
-                created_at: new Date().toISOString(),
-                registered_worker_id: null
-            };
-            users.push(existingUser);
-            this._saveUsersDb(users);
-        }
+            // 1 soniyadan keyin avtomatik login qildirish
+            setTimeout(() => {
+                const name = "Sarvar Salimov";
+                const email = "salimovsarvar518@gmail.com";
 
-        const sessionUser = { ...existingUser };
-        delete sessionUser.password;
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(sessionUser));
-        
-        return sessionUser;
+                const users = self._getUsersDb();
+                let existingUser = users.find(u => u.email === email);
+                
+                if (!existingUser) {
+                    existingUser = {
+                        id: Date.now(),
+                        full_name: name,
+                        email: email,
+                        password: null,
+                        avatar: null,
+                        provider: 'google',
+                        created_at: new Date().toISOString(),
+                        registered_worker_id: null
+                    };
+                    users.push(existingUser);
+                    self._saveUsersDb(users);
+                }
+
+                const sessionUser = { ...existingUser };
+                delete sessionUser.password;
+                localStorage.setItem(self.STORAGE_KEY, JSON.stringify(sessionUser));
+                
+                overlay.remove();
+                resolve(sessionUser);
+            }, 1000);
+        });
     },
 
     // Logout
@@ -253,7 +273,7 @@ function updateNavbarForAuth(user) {
         const signInBtn = document.createElement('button');
         signInBtn.id = 'userSignInNavBtn';
         signInBtn.className = 'btn btn-outline btn-sm user-profile-btn';
-        signInBtn.innerHTML = '<i class="fa-solid fa-user"></i> Kirish';
+        signInBtn.innerHTML = '<i class="fa-solid fa-user"></i> <span data-i18n="nav_login_user">Kirish</span>';
         signInBtn.addEventListener('click', () => openAuthModal());
         
         const loginBtn = document.getElementById('loginBtn');
@@ -266,7 +286,7 @@ function updateNavbarForAuth(user) {
         mobileSignIn.id = 'mobileSignInBtn';
         mobileSignIn.className = 'btn btn-primary btn-sm';
         mobileSignIn.style = 'width:100%;margin-bottom:10px;';
-        mobileSignIn.innerHTML = '<i class="fa-solid fa-user"></i> Kirish / Ro\'yxatdan o\'tish';
+        mobileSignIn.innerHTML = '<i class="fa-solid fa-user"></i> <span data-i18n="nav_login_user">Kirish</span>';
         mobileSignIn.addEventListener('click', () => {
             openAuthModal();
             document.getElementById('mobileMenu')?.classList.remove('open');
@@ -278,6 +298,11 @@ function updateNavbarForAuth(user) {
         if (mobileButtonArea) {
             mobileButtonArea.insertBefore(mobileSignIn, mobileButtonArea.firstChild);
         }
+    }
+    
+    // Make sure we apply translations to newly added elements
+    if (typeof applyTranslations === 'function') {
+        applyTranslations();
     }
 }
 
@@ -292,6 +317,10 @@ function openAuthModal(mode = 'login') {
     // Switch to correct tab
     switchAuthTab(mode);
     modal.style.display = 'flex';
+    
+    if (typeof applyTranslations === 'function') {
+        applyTranslations(modal);
+    }
 }
 
 function createAuthModal() {
@@ -304,37 +333,37 @@ function createAuthModal() {
             
             <!-- Auth Tabs -->
             <div class="auth-tabs">
-                <button class="auth-tab active" data-auth-tab="login">Kirish</button>
-                <button class="auth-tab" data-auth-tab="signup">Ro'yxatdan o'tish</button>
+                <button class="auth-tab active" data-auth-tab="login" data-i18n="auth_login_tab">Kirish</button>
+                <button class="auth-tab" data-auth-tab="signup" data-i18n="auth_signup_tab">Ro'yxatdan o'tish</button>
             </div>
 
             <!-- Login Form -->
             <div id="authLoginPanel" class="auth-panel active">
                 <form id="userLoginForm">
                     <div class="form-group">
-                        <label for="userLoginEmail">Email</label>
+                        <label for="userLoginEmail" data-i18n="auth_email_label">Email</label>
                         <input type="email" id="userLoginEmail" placeholder="email@gmail.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="userLoginPassword">Parol</label>
+                        <label for="userLoginPassword" data-i18n="auth_pass_label">Parol</label>
                         <div class="password-wrapper" style="position:relative;">
-                            <input type="password" id="userLoginPassword" placeholder="Parolingizni kiriting" required style="padding-right:45px;">
+                            <input type="password" id="userLoginPassword" required style="padding-right:45px;">
                             <i class="fa-solid fa-eye-slash toggle-password" id="toggleLoginPass" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-muted);"></i>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100" style="padding:14px;">
-                        <i class="fa-solid fa-right-to-bracket"></i> Kirish
+                        <i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="auth_login_btn">Kirish</span>
                     </button>
                 </form>
                 <div class="auth-divider">
-                    <span>yoki</span>
+                    <span data-i18n="auth_or">yoki</span>
                 </div>
                 <button id="googleLoginBtn" class="btn-google">
                     <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-                    Google bilan kirish
+                    <span data-i18n="auth_google_login">Google bilan kirish</span>
                 </button>
                 <p class="auth-switch-text">
-                    Hisobingiz yo'qmi? <a href="#" id="switchToSignup">Ro'yxatdan o'ting</a>
+                    <span data-i18n="auth_no_account">Hisobingiz yo'qmi?</span> <a href="#" id="switchToSignup" data-i18n="auth_signup_tab">Ro'yxatdan o'ting</a>
                 </p>
             </div>
 
@@ -342,33 +371,33 @@ function createAuthModal() {
             <div id="authSignupPanel" class="auth-panel">
                 <form id="userSignupForm">
                     <div class="form-group">
-                        <label for="userSignupName">To'liq ismingiz</label>
-                        <input type="text" id="userSignupName" placeholder="Ism Familiya" required>
+                        <label for="userSignupName" data-i18n="auth_name_label">To'liq ismingiz</label>
+                        <input type="text" id="userSignupName" required>
                     </div>
                     <div class="form-group">
-                        <label for="userSignupEmail">Email</label>
-                        <input type="email" id="userSignupEmail" placeholder="email@gmail.com" required>
+                        <label for="userSignupEmail" data-i18n="auth_email_label">Email</label>
+                        <input type="email" id="userSignupEmail" required>
                     </div>
                     <div class="form-group">
-                        <label for="userSignupPassword">Parol</label>
+                        <label for="userSignupPassword" data-i18n="auth_pass_label">Parol</label>
                         <div class="password-wrapper" style="position:relative;">
-                            <input type="password" id="userSignupPassword" placeholder="Kamida 6 ta belgi" required minlength="6" style="padding-right:45px;">
+                            <input type="password" id="userSignupPassword" required minlength="6" style="padding-right:45px;">
                             <i class="fa-solid fa-eye-slash toggle-password" id="toggleSignupPass" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-muted);"></i>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100" style="padding:14px;background:var(--success);box-shadow:0 4px 14px rgba(16,185,129,0.3);">
-                        <i class="fa-solid fa-user-plus"></i> Ro'yxatdan o'tish
+                        <i class="fa-solid fa-user-plus"></i> <span data-i18n="auth_signup_btn">Ro'yxatdan o'tish</span>
                     </button>
                 </form>
                 <div class="auth-divider">
-                    <span>yoki</span>
+                    <span data-i18n="auth_or">yoki</span>
                 </div>
                 <button id="googleSignupBtn" class="btn-google">
                     <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-                    Google bilan ro'yxatdan o'tish
+                    <span data-i18n="auth_google_signup">Google bilan ro'yxatdan o'tish</span>
                 </button>
                 <p class="auth-switch-text">
-                    Hisobingiz bormi? <a href="#" id="switchToLogin">Kirish</a>
+                    <span data-i18n="auth_has_account">Hisobingiz bormi?</span> <a href="#" id="switchToLogin" data-i18n="auth_login_tab">Kirish</a>
                 </p>
             </div>
         </div>
@@ -444,11 +473,17 @@ function setupAuthModalEvents(modal) {
     });
 
     // Google buttons
-    const handleGoogle = () => {
-        const user = UserAuth.googleSignIn();
-        showToast(`Google orqali kirdingiz: ${user.full_name}`, 'success');
-        modal.style.display = 'none';
-        updateNavbarForAuth(user);
+    const handleGoogle = async () => {
+        try {
+            const user = await UserAuth.googleSignIn();
+            showToast(`Google orqali kirdingiz: ${user.full_name}`, 'success');
+            modal.style.display = 'none';
+            updateNavbarForAuth(user);
+        } catch (err) {
+            if (err.message !== 'Bekor qilindi') {
+                showToast(err.message, 'error');
+            }
+        }
     };
     modal.querySelector('#googleLoginBtn')?.addEventListener('click', handleGoogle);
     modal.querySelector('#googleSignupBtn')?.addEventListener('click', handleGoogle);

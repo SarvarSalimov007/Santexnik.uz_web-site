@@ -1,4 +1,6 @@
 import logging
+import os
+import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters
 from config import BOT_TOKEN
@@ -32,7 +34,14 @@ def main():
 
     # Run the bot until the user presses Ctrl-C
     logger.info("🤖 Santexnik.uz bot ishga tushdi!")
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    
+    # drop_pending_updates=True ensures the bot doesn't process old queued
+    # messages that piled up while it was offline on the server.
+    # This prevents duplicate/stale responses after a server restart.
+    application.run_polling(
+        allowed_updates=Update.ALL_TYPES,
+        drop_pending_updates=True,
+    )
 
 if __name__ == "__main__":
     main()
