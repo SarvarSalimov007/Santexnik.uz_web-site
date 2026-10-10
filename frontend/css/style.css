@@ -854,7 +854,7 @@ h1, h2, h3, h4 {
     transition: transform .3s;
 }
 .floating-card:hover { transform: scale(1.05); }
-.card-1 { top: 16%; right: 6%; animation-delay: 0s; }
+.card-1 { top: 16%; right: -5%; animation-delay: 0s; }
 .card-2 { bottom: 20%; left: 6%; animation-delay: 3s; }
 @keyframes float {
     0%, 100% { transform: translateY(0); }
