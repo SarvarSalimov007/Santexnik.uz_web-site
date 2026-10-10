@@ -199,7 +199,7 @@ function updateNavbarForAuth(user) {
                 </div>
                 <div class="user-dropdown-divider"></div>
                 <div class="user-dropdown-item" id="userLogoutBtn">
-                    <i class="fa-solid fa-right-from-bracket"></i> Chiqish
+                    <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="auth_logout">Chiqish</span>
                 </div>
             </div>
         `;
@@ -238,7 +238,7 @@ function updateNavbarForAuth(user) {
                 </div>
             </div>
             <button id="mobileUserLogoutBtn" class="btn btn-outline btn-sm" style="width:100%;margin-bottom:10px;">
-                <i class="fa-solid fa-right-from-bracket"></i> Hisobdan chiqish
+                <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="auth_logout">Hisobdan chiqish</span>
             </button>
         `;
         
