@@ -1,1 +1,1 @@
-# Santexnik.uz_web-site
+# Mysantexnik.uz_web-site
