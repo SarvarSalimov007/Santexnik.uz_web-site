@@ -311,14 +311,7 @@
                     weight: 6,
                     description: "O'rnatish va montaj"
                 },
-                accessibility: {
-                    keywords: [
-                        "ko'zi ojiz", 'kozi ojiz', 'nogiron', 'imkoniyati cheklan', 'maxsus ehtiyoj',
-                        'ovozli yordam', 'ovozli xizmat', 'ovozli reji'
-                    ],
-                    weight: 6,
-                    description: 'Imkoniyati cheklanganlar uchun qulaylik'
-                },
+
                 greeting: {
                     keywords: [
                         'salom', 'assalomu', 'hayrli', 'xayrli', 'hello', 'hi', 'hey', 'privet',
@@ -693,14 +686,7 @@
                     ]
                 },
 
-                accessibility: {
-                    main: `♿ **Maxsus Ehtiyojli Shaxslar Uchun Imkoniyatlar:**\n\nMySantexnik.uz platformasida ovozli to'liq qulaylik yaratilgan:\n🎙️ **Ovozli buyurtma:** Mikrofon orqali gapiring\n🔊 **Ovozli eshitish:** Har bir xabar ovoz chiqarib o'qib beriladi\n👁️ **Kattalashtirilgan shrift:** Yuqori kontrastli interfeys\n📞 **1 bosishda dispetcher:** To'g'ridan-to'g'ri aloqa`,
-                    followUp: [
-                        "Dispetcherga qo'ng'iroq",
-                        "Ovozli rejimni yoqish",
-                        "Usta buyurtma berish"
-                    ]
-                },
+
 
                 greeting: {
                     responses: [
@@ -855,7 +841,6 @@
         constructor() {
             this.isOpen = false;
             this.isListening = false;
-            this.isAccessibilityMode = localStorage.getItem('ustajon_a11y') === 'true';
             this.soundEnabled = localStorage.getItem('ustajon_sound') !== 'false';
             this.currentLang = localStorage.getItem('ustajon_lang') || 'uz';
             this.isTyping = false;
@@ -878,7 +863,6 @@
             this.initDOM();
             this.initSpeechRecognition();
             this.bindEvents();
-            this.applyAccessibilityMode();
         }
 
         // ─── DOM Yaratish ───────────────────────────────────
@@ -914,8 +898,8 @@
                             <div class="ustajon-online-dot"></div>
                         </div>
                         <div class="ustajon-titles">
-                            <h3>Ustajon AI <i class="fa-solid fa-circle-check" style="color:#60a5fa;font-size:12px;"></i></h3>
-                            <p><i class="fa-solid fa-bolt" style="color:#facc15;font-size:10px;"></i> MySantexnik.uz — Smart Assistant v6.0</p>
+                            <h3>Ustajon AI <i class="fa-solid fa-circle-check" style="color:#60a5fa;font-size:11px;"></i></h3>
+                            <p><i class="fa-solid fa-bolt" style="color:#facc15;font-size:9px;"></i> v6.0 AI</p>
                         </div>
                     </div>
                     <div class="ustajon-header-actions">
@@ -927,16 +911,13 @@
                         <button class="ustajon-icon-btn ${!this.soundEnabled ? 'sound-muted' : ''}" id="ustajonSoundBtn" title="Ovoz effektlari">
                             <i class="fa-solid ${this.soundEnabled ? 'fa-volume-high' : 'fa-volume-xmark'}"></i>
                         </button>
-                        <button class="ustajon-accessibility-toggle ${this.isAccessibilityMode ? 'active' : ''}" id="ustajonA11yBtn" title="Ko'zi ojizlar uchun ovozli va katta shrift rejimi">
-                            <i class="fa-solid fa-universal-access"></i> Ovozli
-                        </button>
                         <button class="ustajon-icon-btn" id="ustajonClearBtn" title="Chatni tozalash">
                             <i class="fa-solid fa-rotate-right"></i>
                         </button>
                         <button class="ustajon-icon-btn" id="ustajonExportBtn" title="Suhbatni yuklab olish">
                             <i class="fa-solid fa-download"></i>
                         </button>
-                        <button class="ustajon-icon-btn" id="ustajonCloseBtn" title="Yopish">
+                        <button class="ustajon-icon-btn ustajon-close-btn" id="ustajonCloseBtn" title="Yopish (Chiqish)" aria-label="Yopish">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -1045,7 +1026,6 @@
             const sendBtn = document.getElementById('ustajonSendBtn');
             const input = document.getElementById('ustajonInput');
             const micBtn = document.getElementById('ustajonMicBtn');
-            const a11yBtn = document.getElementById('ustajonA11yBtn');
             const uploadBtn = document.getElementById('ustajonUploadBtn');
             const fileInput = document.getElementById('ustajonFileInput');
             const suggestions = document.getElementById('ustajonSuggestions');
@@ -1075,10 +1055,6 @@
             if (uploadBtn && fileInput) {
                 uploadBtn.addEventListener('click', () => fileInput.click());
                 fileInput.addEventListener('change', (e) => this.handlePhotoUpload(e));
-            }
-
-            if (a11yBtn) {
-                a11yBtn.addEventListener('click', () => this.toggleAccessibilityMode());
             }
 
             const soundBtn = document.getElementById('ustajonSoundBtn');
@@ -1243,9 +1219,7 @@
             if (greeting) greeting.style.display = 'none';
             sound.playChime();
 
-            if (this.isAccessibilityMode) {
-                this.speakText("Ustajon AI ochildi. Savolingizni mikrofon orqali bering yoki dispetcherga ulaning.");
-            }
+
 
             setTimeout(() => {
                 const input = document.getElementById('ustajonInput');
@@ -1360,39 +1334,7 @@
             }
         }
 
-        // ─── Accessibility ──────────────────────────────────
-        toggleAccessibilityMode() {
-            this.isAccessibilityMode = !this.isAccessibilityMode;
-            localStorage.setItem('ustajon_a11y', this.isAccessibilityMode);
-            this.applyAccessibilityMode();
 
-            if (this.isAccessibilityMode) {
-                this.speakText("Ovozli va kattalashtirilgan rejim yoqildi. Barcha javoblar ovozli o'qiladi.");
-            } else {
-                this.stopSpeaking();
-            }
-        }
-
-        applyAccessibilityMode() {
-            const win = document.getElementById('ustajonWindow');
-            const btn = document.getElementById('ustajonA11yBtn');
-            if (win) {
-                if (this.isAccessibilityMode) {
-                    win.classList.add('accessibility-mode');
-                } else {
-                    win.classList.remove('accessibility-mode');
-                }
-            }
-            if (btn) {
-                if (this.isAccessibilityMode) {
-                    btn.classList.add('active');
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Ovozli (Yoqiq)';
-                } else {
-                    btn.classList.remove('active');
-                    btn.innerHTML = '<i class="fa-solid fa-universal-access"></i> Ovozli';
-                }
-            }
-        }
 
         // ═════════════════════════════════════════════════════
         // 📷 VISION AI — FOTOSURAT ORQALI DIAGNOSTIKA
@@ -1588,7 +1530,7 @@
                 this.removeTypingIndicator();
 
                 // Interaktiv vidjetlar (kalkulyator, diagnostika ustasi, ariza) uchun maxsus oqim
-                const isInteractiveTool = ['interactive_calculator', 'interactive_diagnostic', 'instant_booking', 'photo_vision', 'accessibility'].includes(analysis.intent);
+                const isInteractiveTool = ['interactive_calculator', 'interactive_diagnostic', 'instant_booking', 'photo_vision'].includes(analysis.intent);
 
                 if (!isInteractiveTool && window.api && typeof window.api.aiChat === 'function') {
                     try {
@@ -1753,11 +1695,7 @@
                     followUpSuggestions = responses.installation.followUp;
                     break;
 
-                case 'accessibility':
-                    responseText = responses.accessibility.main;
-                    extraHTML = this.buildAccessibilityCard();
-                    followUpSuggestions = responses.accessibility.followUp;
-                    break;
+
 
                 case 'greeting':
                     const greetings = responses.greeting.responses;
@@ -2346,15 +2284,7 @@
             return cardsHTML;
         }
 
-        buildAccessibilityCard() {
-            return `
-                <div style="margin-top:10px;">
-                    <a href="tel:+998712000000" class="btn w-100" style="background:#f59e0b;color:#1e1b4b;font-weight:800;padding:14px;border-radius:12px;text-align:center;text-decoration:none;display:block;box-shadow:0 4px 12px rgba(245,158,11,0.3);font-size:15px;">
-                        <i class="fa-solid fa-phone-volume"></i> 1 bosishda Dispetcher bilan bog'lanish
-                    </a>
-                </div>
-            `;
-        }
+
 
         // ═════════════════════════════════════════════════════
         // STREAM EFFEKT BILAN XABAR CHIQARISH (Streaming)
@@ -2430,10 +2360,7 @@
 
                         this.bindActionBarEvents(msgEl, streamContainer);
 
-                        if (this.isAccessibilityMode) {
-                            const plainText = streamContainer.innerText;
-                            this.speakText(plainText, msgEl.querySelector('.ustajon-speak-btn'));
-                        }
+
 
                         this.isTyping = false;
                         sound.playSuccess();
@@ -2581,9 +2508,7 @@
             body.appendChild(msgEl);
             body.scrollTop = body.scrollHeight;
 
-            if (autoSpeak && this.isAccessibilityMode) {
-                this.speakText(streamContainer.innerText, msgEl.querySelector('.ustajon-speak-btn'));
-            }
+
         }
 
         showTypingIndicator() {

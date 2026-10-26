@@ -153,116 +153,131 @@
 .ustajon-header {
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #0284c7 100%);
     color: #ffffff;
-    padding: 16px 18px;
+    padding: 10px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
     position: relative;
     box-shadow: 0 4px 15px rgba(30, 58, 138, 0.25);
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .ustajon-header-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
 }
 
 .ustajon-avatar-box {
     position: relative;
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
     background: rgba(255, 255, 255, 0.18);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 16px;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
 }
 
 .ustajon-online-dot {
     position: absolute;
     bottom: -2px;
     right: -2px;
-    width: 13px;
-    height: 13px;
+    width: 9px;
+    height: 9px;
     background: #10b981;
-    border: 2.5px solid #1e3a8a;
+    border: 2px solid #1e3a8a;
     border-radius: 50%;
+}
+
+.ustajon-titles {
+    min-width: 0;
+    overflow: hidden;
 }
 
 .ustajon-titles h3 {
     margin: 0;
-    font-size: 16px;
+    font-size: 13.5px;
     font-weight: 700;
     letter-spacing: -0.3px;
     color: #ffffff;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ustajon-titles p {
-    margin: 2px 0 0;
-    font-size: 12px;
+    margin: 1px 0 0;
+    font-size: 10px;
     color: rgba(255, 255, 255, 0.82);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ustajon-header-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 3.5px;
+    flex-shrink: 0;
+    margin-left: auto;
 }
 
 .ustajon-icon-btn {
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.25);
     color: #ffffff;
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: flex;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
     transition: all 0.2s;
+    flex-shrink: 0;
+    padding: 0;
 }
 
 .ustajon-icon-btn:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
-.ustajon-accessibility-toggle {
-    background: #f59e0b;
-    color: #1e1b4b;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
-    transition: all 0.2s;
+.ustajon-close-btn {
+    background: rgba(239, 68, 68, 0.4) !important;
+    border: 1px solid rgba(248, 113, 113, 0.7) !important;
+    color: #ffffff !important;
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 12px !important;
+    margin-left: 2px;
 }
 
-.ustajon-accessibility-toggle:hover {
-    background: #fbbf24;
-    transform: scale(1.04);
+.ustajon-close-btn:hover {
+    background: #ef4444 !important;
+    border-color: #ef4444 !important;
+    color: #ffffff !important;
+    transform: scale(1.08) !important;
 }
 
-.ustajon-accessibility-toggle.active {
-    background: #10b981;
-    color: #ffffff;
-}
+
 
 /* --- 4. Ko'zi ojizlar / Shoshilinch Banner --- */
 .ustajon-sos-banner {
@@ -1165,53 +1180,7 @@
 }
 
 
-/* --- 10. ACCESSIBILITY MODE (Ko'zi ojizlar / Maxsus Katta Rejim) --- */
-.ustajon-window.accessibility-mode {
-    border: 3px solid #f59e0b;
-}
 
-.ustajon-window.accessibility-mode .ustajon-header {
-    background: #1e1b4b;
-    padding: 20px;
-}
-
-.ustajon-window.accessibility-mode .ustajon-titles h3 {
-    font-size: 19px;
-}
-
-.ustajon-window.accessibility-mode .ustajon-body {
-    background: #ffffff;
-}
-
-.ustajon-window.accessibility-mode .ustajon-bubble {
-    font-size: 16.5px;
-    line-height: 1.65;
-    font-weight: 500;
-}
-
-.ustajon-window.accessibility-mode .ustajon-sos-banner {
-    background: #fef08a;
-    color: #713f12;
-    padding: 14px;
-    font-size: 15px;
-}
-
-.ustajon-window.accessibility-mode .ustajon-sos-call-btn {
-    padding: 10px 18px;
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.ustajon-window.accessibility-mode .ustajon-input {
-    font-size: 16px;
-    padding: 14px;
-}
-
-.ustajon-window.accessibility-mode .ustajon-speak-btn {
-    font-size: 14px;
-    padding: 8px 14px;
-    background: #dbeafe;
-}
 
 /* --- Responsive (Mobile) --- */
 @media (max-width: 520px) {
@@ -1237,6 +1206,17 @@
         border-radius: 0;
         border: none;
     }
+    .ustajon-header {
+        padding: 8px 10px;
+    }
+    .ustajon-titles p {
+        display: none;
+    }
+    .ustajon-avatar-box {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+    }
 }
 
 /* ================================================================
@@ -1247,24 +1227,25 @@
 .ustajon-lang-selector {
     display: inline-flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.16);
-    padding: 2px 4px;
-    border-radius: 12px;
-    gap: 3px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1px 2px;
+    border-radius: 7px;
+    gap: 2px;
     border: 1px solid rgba(255, 255, 255, 0.25);
-    margin-right: 4px;
+    margin-right: 2px;
+    flex-shrink: 0;
 }
 
 .ustajon-lang-btn {
     background: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.85);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    padding: 3px 6px;
-    border-radius: 8px;
+    padding: 2px 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     line-height: 1;
 }
 
@@ -1276,7 +1257,7 @@
 .ustajon-lang-btn.active {
     background: #ffffff;
     color: #1e3a8a;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* --- Ovoz (Sound FX) tugmasi --- */
