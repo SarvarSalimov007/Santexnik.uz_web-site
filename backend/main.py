@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from database import engine, init_db, get_db
 import models
-from routers import workers, users, contacts
+from routers import workers, users, contacts, ai
 
 # Create database tables
 init_db()
@@ -33,6 +33,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(users.router)
 app.include_router(workers.router)
 app.include_router(contacts.router)
+app.include_router(ai.router)
 
 @app.get("/")
 def read_root():

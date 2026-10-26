@@ -346,7 +346,7 @@ h1, h2, h3, h4 {
 }
 .logo span { color: var(--primary); }
 
-.nav-links { display: flex; gap: 36px; }
+.nav-links { display: flex; gap: 24px; flex-shrink: 1; min-width: 0; }
 .nav-links a {
     font-weight: 500;
     color: var(--text-muted);
@@ -371,7 +371,7 @@ h1, h2, h3, h4 {
 .nav-links a:hover,
 .nav-links a.active { color: var(--primary); }
 
-.nav-actions { display: flex; gap: 12px; align-items: center; }
+.nav-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
 
 /* Theme Cycle Button (single button cycling light→dark→cyber) */
 .theme-cycle-btn {
@@ -1898,28 +1898,30 @@ h1, h2, h3, h4 {
     animation: slideOutUp 0.3s var(--ease) forwards;
 }
 
-/* ===== Floating Contact Button ===== */
+/* ===== Floating Contact Button (Telegram) ===== */
 .floating-contact-btn {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #0088cc, #005580);
+    bottom: 28px;
+    right: 28px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #0088cc, #0077b5, #005580);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 25px rgba(0, 136, 204, 0.4);
-    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 136, 204, 0.4), 0 0 0 3px rgba(0, 136, 204, 0.15);
+    z-index: 998;
     cursor: pointer;
-    transition: all 0.3s var(--ease-spring);
+    transition: all 0.35s var(--ease-spring);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 .floating-contact-btn:hover {
-    transform: scale(1.1) translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 136, 204, 0.6);
+    transform: scale(1.12) translateY(-4px);
+    box-shadow: 0 14px 32px rgba(0, 136, 204, 0.55), 0 0 0 5px rgba(0, 136, 204, 0.2);
     color: white;
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 /* ===== Category Count Badge ===== */
